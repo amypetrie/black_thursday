@@ -1,36 +1,53 @@
+require 'time'
+require 'bigdecimal'
+require_relative '../lib/sales_engine'
+require_relative '../lib/csv_adaptor'
+require_relative '../lib/merchant'
+require_relative '../lib/item'
+require_relative '../lib/item_repo'
+
 class MerchantRepo < CsvAdaptor
 
-    attr_reader :merchants,
-                :data_file
+  attr_reader :merchants,
+              :data_file
 
-  def initialize(data_file)
+  def initialize(data_file, merchants=[])
     @data_file = data_file
-    @merchants = []
+    @merchants = merchants
   end
 
-  def all_merchant_characteristics(data_file)
-    load_merchants(data_file)
-  end
+  # def all_merchant_characteristics(data_file)
+  #   load_merchants(data_file)
+  # end
 
   def all
-    load_merchants(data_file).each do |merchant_info|
-      @merchants << Merchant.new(merchant_info)
-    end
     @merchants
   end
 
+  # def load_all_merchants
+  #   load_merchants(data_file).each do |merchant_info|
+  #     @merchants << Merchant.new(merchant_info)
+  #   end
+  # end
+
+  # def find_by_id(id)
+  #   @merchants.inject([]) do |array, merchant|
+  #     if merchant.id == id
+  #       merchant
+  #     end
+  #   end
+  #   # nil
+  # end
+
   def find_by_id(id)
-    @merchants.each do |merchant|
-      if merchant.id == id
-        return merchant
-      end
+    @merchants.find do |merchant|
+      merchant.id == id
     end
-    nil
   end
 
   def find_by_name(name)
     @merchants.each do |merchant|
-      if merchant.name == name
+      if merchant.name.downcase == name.downcase
         return merchant
       end
     end
@@ -44,14 +61,16 @@ class MerchantRepo < CsvAdaptor
   end
 
   def find_highest_merchant_id
-    @merchants.max_by do |merchant|
+    m = @merchants.max_by do |merchant|
       merchant.id
-    end.id
+    end
+    m.id
   end
 
   def create(attributes)
+    attributes[:id] = (find_highest_merchant_id + 1)
     merchant = Merchant.new(attributes)
-    merchant.create_id(find_highest_merchant_id + 1)
+    @merchants << merchant
     merchant
   end
 
@@ -68,5 +87,11 @@ class MerchantRepo < CsvAdaptor
       merchant.id == id
     end
   end
-  
+
+  def merchant_array_from_file
+    load_merchants(data_file).each do |merchant_info|
+      @merchants << Merchant.new(merchant_info)
+    end
+  end
+
 end
