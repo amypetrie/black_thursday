@@ -68,4 +68,5 @@ class MerchantRepo < CsvAdaptor
       merchant.id == id
     end
   end
+  
 end
