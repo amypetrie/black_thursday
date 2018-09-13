@@ -19,7 +19,7 @@ class ItemTest < Minitest::Test
       :id          => 1,
       :name        => "Pencil",
       :description => "You can use it to write things",
-      :unit_price  => 10.99,
+      :unit_price  => 1099,
       :created_at  => Time.now,
       :updated_at  => Time.now,
       :merchant_id => 2
@@ -40,41 +40,6 @@ class ItemTest < Minitest::Test
     })
 
     assert_equal 60.00, i.unit_price_to_dollars
-  end
-
-  def test_unit_price_to_big_decimal
-    i = Item.new({
-      :id          => 1,
-      :name        => "Pencil",
-      :description => "You can use it to write things",
-      :unit_price  => 6000,
-      :created_at  => Time.now,
-      :updated_at  => Time.now,
-      :merchant_id => 2
-    })
-
-    assert_equal BigDecimal(6000), i.unit_price_to_big_decimal
-  end
-
-  def test_changing_attributes
-    i = Item.new({
-      :id          => 1,
-      :name        => "Pencil",
-      :description => "You can use it to write things",
-      :unit_price  => BigDecimal.new(10.99,4),
-      :created_at  => Time.now,
-      :updated_at  => Time.now,
-      :merchant_id => 2
-    })
-    i.change_name("TEST")
-    i.change_description("TEST")
-    i.change_unit_price(1000000)
-    i.change_updated_at
-
-    assert_equal "TEST", i.name
-    assert_equal "TEST", i.description
-    assert_equal 1000000, i.unit_price
-    refute i.updated_at == nil
   end
 
 end
