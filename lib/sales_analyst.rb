@@ -72,7 +72,7 @@ class SalesAnalyst < SalesEngine
     array
   end
 
-  def find_merchant_objects_with_high_item_count
+  def merchants_with_high_item_count
     array = []
     find_merchant_ids_with_high_item_count.each do |id|
       merchants.all.each do |merchant|
@@ -86,14 +86,16 @@ class SalesAnalyst < SalesEngine
 
   def average_item_price_for_merchant(id)
     id = id.to_s
-    item_array = find_item_object_per_merchant[id].map do |item|
-      item.unit_price_to_dollars
+    merchant_items = items.find_all_by_merchant_id(id)
+    item_array = merchant_items.map do |item|
+      item.unit_price
     end
     sum = item_array.reduce(0) do |sum, price|
       sum += price
       sum
     end
-    BigDecimal((sum / item_array.length))
+    avg = (sum / item_array.length)
+    BigDecimal((sum / item_array.length)).round(2)
   end
 
   def average_average_price_per_merchant
@@ -104,18 +106,27 @@ class SalesAnalyst < SalesEngine
       sum += price
       sum
     end
-    BigDecimal((sum / average_price_array.length))
+    BigDecimal((sum / average_price_array.length)).round(2)
   end
 ### Golden Method
-  def find_average_item_price_array
-    average_price_array = find_all_merchant_ids.map do |id|
-      average_item_price_for_merchant(id)
+
+  def average_item_price_array
+    average_price_array = items.all.map do |item|
+      item.price
     end
   end
 
+  def average_item_price
+    sum = average_item_price_array.reduce(0) do |sum, price|
+      sum += price
+      sum
+    end
+    ((sum / average_item_price_array.length)).round(2)
+  end
+
   def find_item_price_standard_deviation_step_one
-    find_average_item_price_array.map do |num|
-      (num - average_average_price_per_merchant)**2
+    average_item_price_array.map do |num|
+      (num - average_item_price)**2
     end
   end
 
@@ -131,6 +142,13 @@ class SalesAnalyst < SalesEngine
 
   def average_item_price_standard_deviation
     Math.sqrt(find_item_price_standard_deviation_step_three).round(2)
+  end
+
+  def golden_items
+    golden_value = average_item_price + (average_item_price_standard_deviation * 2)
+    items.all.find_all do |item|
+      item.price > golden_value
+    end
   end
 
 end

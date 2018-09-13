@@ -66,20 +66,28 @@ class MerchantRepo < CsvAdaptor
 
   def create(attributes)
     attributes[:id] = (find_highest_merchant_id + 1)
+    attributes[:created_at] = Time.now
+    attributes[:updated_at] = Time.now
     merchant = Merchant.new(attributes)
     @merchants << merchant
     merchant
   end
 
   def update(id, attributes)
-    if find_by_id(id) == nil
-      nil
-    end
     merchant = find_by_id(id)
+<<<<<<< HEAD
     merchant.name = attributes[:name]
     # merchant.change_name(new_name)
     # merchant.change_updated_at
     merchant
+=======
+    if merchant == nil
+      do_nothing
+    else
+      merchant.name = attributes[:name]
+      merchant.change_updated_at
+    end
+>>>>>>> 6d8abacc9c737af68ca8991694fb39ec454232cf
   end
 
   def delete(id)
