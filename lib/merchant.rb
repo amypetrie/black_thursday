@@ -1,12 +1,15 @@
 class Merchant
 
-  attr_reader :name, :id
+  attr_reader :id
+
+  attr_accessor :name
 
   def initialize(attributes)
+    time = Time.now
     @name = attributes[:name]
     @id = attributes[:id]
-    @created_at = Time.now.getutc
-    @updated_at = Time.now.getutc
+    @created_at = Time.parse(time.to_s)
+    @updated_at = Time.parse(time.to_s)
   end
 
   def create_id(new_id)
@@ -18,7 +21,7 @@ class Merchant
   end
 
   def change_updated_at
-    @updated_at = Time.now.getutc
+    @updated_at = Time.now
   end
 
 end
