@@ -7,7 +7,9 @@ class Item
               :merchant_id,
               :created_at
 
-  attr_accessor :updated_at
+  attr_accessor :updated_at,
+                :name,
+                :description
 
   def initialize(item_hash, created_at=Time.now, updated_at=Time.now)
     @id = item_hash[:id]
@@ -27,9 +29,9 @@ class Item
     @id = new_id.to_i
   end
 
-  def change_name(new_name)
-    @name = new_name
-  end
+  # def change_name(new_name)
+  #   @name = new_name
+  # end
 
   def change_description(new_description)
     @description = new_description

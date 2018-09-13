@@ -92,10 +92,10 @@ class ItemRepo < CsvAdaptor
     new_name = attributes[:name]
     new_description = attributes[:description]
     new_unit_price = attributes[:unit_price]
-    item.change_name(new_name)
-    item.change_description(new_description)
-    item.change_unit_price(new_unit_price)
-    item.change_updated_at
+    # item.change_name(new_name)
+    # item.change_description(new_description)
+    # item.change_unit_price(new_unit_price)
+    # item.change_updated_at
     item
   end
 

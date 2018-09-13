@@ -76,9 +76,9 @@ class MerchantRepo < CsvAdaptor
       nil
     end
     merchant = find_by_id(id)
-    new_name = attributes[:name]
-    merchant.change_name(new_name)
-    merchant.change_updated_at
+    merchant.name = attributes[:name]
+    # merchant.change_name(new_name)
+    # merchant.change_updated_at
     merchant
   end
 
