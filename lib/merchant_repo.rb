@@ -75,19 +75,12 @@ class MerchantRepo < CsvAdaptor
 
   def update(id, attributes)
     merchant = find_by_id(id)
-<<<<<<< HEAD
-    merchant.name = attributes[:name]
-    # merchant.change_name(new_name)
-    # merchant.change_updated_at
-    merchant
-=======
     if merchant == nil
       do_nothing
     else
       merchant.name = attributes[:name]
       merchant.change_updated_at
     end
->>>>>>> 6d8abacc9c737af68ca8991694fb39ec454232cf
   end
 
   def delete(id)
