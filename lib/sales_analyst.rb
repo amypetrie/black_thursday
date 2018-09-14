@@ -146,7 +146,7 @@ class SalesAnalyst < SalesEngine
 
   def golden_items
     golden_value = average_item_price + (average_item_price_standard_deviation * 2)
-    items.all.find_all do |item|
+    @sales_engine.items.all.find_all do |item|
       item.price > golden_value
     end
   end
