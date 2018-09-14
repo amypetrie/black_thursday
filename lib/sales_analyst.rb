@@ -1,27 +1,27 @@
 class SalesAnalyst < SalesEngine
 
-  def initialize(item_file, merchant_file)
-    super(item_file, merchant_file)
+  def initialize(sales_engine)
+    @sales_engine = sales_engine
   end
 
   def average_items_per_merchant
-    (items.all.count / merchants.all.count.to_f).round(2)
+    (@sales_engine.items.all.count / @sales_engine.merchants.all.count.to_f).round(2)
   end
 
   def find_item_object_per_merchant
-    items.all.group_by do |item|
+    @sales_engine.items.all.group_by do |item|
       item.merchant_id
     end
   end
 
   def find_item_object_per_merchant
-    items.all.group_by do |item|
+    @sales_engine.items.all.group_by do |item|
       item.merchant_id
     end
   end
 
   def find_all_merchant_ids
-    merchants.all.map do |merchant|
+    @sales_engine.merchants.all.map do |merchant|
       merchant.id.to_s
     end
   end
@@ -75,7 +75,7 @@ class SalesAnalyst < SalesEngine
   def merchants_with_high_item_count
     array = []
     find_merchant_ids_with_high_item_count.each do |id|
-      merchants.all.each do |merchant|
+      @sales_engine.merchants.all.each do |merchant|
         if merchant.id == id.to_i
           array << merchant
         end
@@ -86,7 +86,7 @@ class SalesAnalyst < SalesEngine
 
   def average_item_price_for_merchant(id)
     id = id.to_s
-    merchant_items = items.find_all_by_merchant_id(id)
+    merchant_items = @sales_engine.items.find_all_by_merchant_id(id)
     item_array = merchant_items.map do |item|
       item.unit_price
     end
@@ -111,7 +111,7 @@ class SalesAnalyst < SalesEngine
 ### Golden Method
 
   def average_item_price_array
-    average_price_array = items.all.map do |item|
+    average_price_array = @sales_engine.items.all.map do |item|
       item.price
     end
   end
@@ -146,7 +146,7 @@ class SalesAnalyst < SalesEngine
 
   def golden_items
     golden_value = average_item_price + (average_item_price_standard_deviation * 2)
-    items.all.find_all do |item|
+    @sales_engine.items.all.find_all do |item|
       item.price > golden_value
     end
   end

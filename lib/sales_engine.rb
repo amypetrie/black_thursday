@@ -7,27 +7,35 @@ require_relative '../lib/merchant'
 require_relative '../lib/merchant_repo'
 require_relative '../lib/item'
 require_relative '../lib/item_repo'
+require_relative '../lib/invoice_repo'
+require_relative '../lib/invoice'
 
 class SalesEngine < CsvAdaptor
 
   attr_reader :item_file,
               :merchant_file,
+              :invoice_file,
               :mr,
-              :ir
+              :ir,
+              :invoices
 
   def self.from_csv(file_hash)
     item_file = file_hash[:items]
     merchant_file = file_hash[:merchants]
-      s = SalesEngine.new(item_file, merchant_file)
+    invoice_file = file_hash[:invoices]
+      s = SalesEngine.new(item_file, merchant_file, invoice_file)
   end
 
-  def initialize(item_file, merchant_file)
+  def initialize(item_file=item_file, merchant_file=merchant_file, invoice_file=invoice_file)
+    @invoice_file = invoice_file
     @item_file = item_file
     @merchant_file = merchant_file
     @mr = MerchantRepo.new(merchant_file)
     mr.merchant_array_from_file
     @ir = ItemRepo.new(item_file)
     ir.item_array_from_file
+    @invoices = InvoiceRepo.new(invoice_file)
+    invoices.invoice_array_from_file
   end
 
   def merchant_array_from_file
@@ -55,7 +63,7 @@ class SalesEngine < CsvAdaptor
   end
 
   def analyst
-    SalesAnalyst.new(@item_file, @merchant_file)
+    SalesAnalyst.new(self)
   end
 
 end
