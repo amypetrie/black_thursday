@@ -17,7 +17,8 @@ class ItemRepoTest < Minitest::Test
   def test_it_exists
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
 
@@ -27,7 +28,8 @@ class ItemRepoTest < Minitest::Test
   def test_all_item_characteristics_imports_item_objects_into_items_array
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
 
@@ -37,7 +39,8 @@ class ItemRepoTest < Minitest::Test
   def test_all_returns_array_of_item_objects
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
 
@@ -47,7 +50,8 @@ class ItemRepoTest < Minitest::Test
   def test_find_by_id_returns_item_object_with_that_id
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     id = 4378423
@@ -59,7 +63,8 @@ class ItemRepoTest < Minitest::Test
   def test_find_by_name_returns_item_object
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     name = "test3"
@@ -72,7 +77,8 @@ class ItemRepoTest < Minitest::Test
   def test_find_all_with_description_returns_items_with_description_fragment
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     description = "description2"
@@ -85,7 +91,8 @@ class ItemRepoTest < Minitest::Test
   def test_find_all_by_price_returns_array_of_matching_items_by_price
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     # want to write better test to ensure method is working - create custom csv
@@ -95,7 +102,8 @@ class ItemRepoTest < Minitest::Test
   def test_find_all_by_price_returns_array_of_matching_items_by_price
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     # want to write better test to ensure method is working - create custom csv
@@ -105,7 +113,8 @@ class ItemRepoTest < Minitest::Test
   def test_find_all_by_price_in_range_returns_array_of_items_in_range
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     range = (0..100)
@@ -118,7 +127,8 @@ class ItemRepoTest < Minitest::Test
   def test_find_all_by_merchant_id_returns_array_of_matching_items_by_merchant_id
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     merchant_id = "1233400"
@@ -129,7 +139,8 @@ class ItemRepoTest < Minitest::Test
   def test_find_highest_item_id
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
 
@@ -139,7 +150,8 @@ class ItemRepoTest < Minitest::Test
   def test_create_creates_new_instance_of_item
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     attributes = {name: "TEST_ITEM", created_at: "2018-09-08", merchant_id: 5, unit_price: 1000}
@@ -150,7 +162,8 @@ class ItemRepoTest < Minitest::Test
   def test_update_will_update_name_description_unit_price_and_updated_at_attributes
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     id = 4378423
@@ -165,7 +178,8 @@ class ItemRepoTest < Minitest::Test
   def test_delete_id_deletes_item_object_from_items_array
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     ir = se.items
     item = ir.find_by_id(4378423)

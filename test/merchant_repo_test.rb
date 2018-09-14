@@ -13,7 +13,8 @@ class MerchantRepoTest < Minitest::Test
   def test_it_exists
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
 
@@ -23,7 +24,8 @@ class MerchantRepoTest < Minitest::Test
   def test_all_merchant_characteristics_returns_array_of_merchant_characteristics
     engine = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = engine.merchants
 
@@ -33,7 +35,8 @@ class MerchantRepoTest < Minitest::Test
   def test_all_returns_array_of_merchant_objects
     engine = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = engine.merchants
 
@@ -43,7 +46,8 @@ class MerchantRepoTest < Minitest::Test
   def test_find_by_id_returns_merchant_id
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
     mr.all
@@ -56,7 +60,8 @@ class MerchantRepoTest < Minitest::Test
   def test_find_by_name_returns_merchant_name
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
     mr.all
@@ -69,7 +74,8 @@ class MerchantRepoTest < Minitest::Test
   def test_it_returns_nil_when_name_or_id_dont_exist
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
     mr.all
@@ -83,7 +89,8 @@ class MerchantRepoTest < Minitest::Test
   def test_find_all_by_name_returns_merchants_with_name_fragment
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
     mr.all
@@ -95,7 +102,8 @@ class MerchantRepoTest < Minitest::Test
   def test_find_highest_merchant_id
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
     mr.all
@@ -106,7 +114,8 @@ class MerchantRepoTest < Minitest::Test
   def test_create_creates_new_instance_of_merchant
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
     mr.all
@@ -118,7 +127,8 @@ class MerchantRepoTest < Minitest::Test
   def test_you_can_update_name_attribute_accessing_through_id
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
     mr.all
@@ -133,7 +143,8 @@ class MerchantRepoTest < Minitest::Test
   def test_delete_id_deletes_merchant_object_from_merchant_array
     se = SalesEngine.from_csv({
       :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv"
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/invoices.csv"
     })
     mr = se.merchants
     mr.all
