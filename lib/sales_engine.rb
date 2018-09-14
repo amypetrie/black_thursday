@@ -55,7 +55,7 @@ class SalesEngine < CsvAdaptor
   end
 
   def analyst
-    SalesAnalyst.new(@item_file, @merchant_file)
+    SalesAnalyst.new(self)
   end
 
 end
