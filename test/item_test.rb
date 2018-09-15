@@ -42,4 +42,18 @@ class ItemTest < Minitest::Test
     assert_equal 60.00, i.unit_price_to_dollars
   end
 
+  def test_create_id_creates_a_new_id
+    i = Item.new({
+      :id          => 1,
+      :name        => "Pencil",
+      :description => "You can use it to write things",
+      :unit_price  => 6000,
+      :created_at  => Time.now,
+      :updated_at  => Time.now,
+      :merchant_id => 2
+    })
+
+    assert_equal 40, i.create_id(40)
+  end
+
 end

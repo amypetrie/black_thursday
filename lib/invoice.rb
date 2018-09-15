@@ -1,12 +1,4 @@
 require 'time'
-require 'bigdecimal'
-require_relative '../lib/sales_engine'
-require_relative '../lib/csv_adaptor'
-require_relative '../lib/merchant'
-require_relative '../lib/merchant_repo'
-require_relative '../lib/item'
-require_relative '../lib/item_repo'
-require_relative '../lib/invoice_repo'
 
 class Invoice
 
