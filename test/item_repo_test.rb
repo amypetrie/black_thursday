@@ -107,6 +107,7 @@ class ItemRepoTest < Minitest::Test
     ir.all
     price = BigDecimal(34.24,4)
     assert_equal 5, ir.find_all_by_price(price).count
+
   end
 
   def test_find_all_by_price_in_range_returns_array_of_items_in_range
