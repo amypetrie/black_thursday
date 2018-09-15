@@ -1,4 +1,5 @@
 require_relative '../lib/repo_methods'
+require 'pry'
 
 class SalesAnalyst < SalesEngine
   include RepoMethods
@@ -38,7 +39,8 @@ class SalesAnalyst < SalesEngine
 #required
   def average_items_per_merchant_standard_deviation
     array = number_of_items_per_merchant
-    find_standard_deviation(array, "sample")
+    average = average_items_per_merchant
+    find_standard_deviation(array, average, "sample")
   end
 
 #helper method
@@ -111,12 +113,126 @@ class SalesAnalyst < SalesEngine
 
   def golden_items
     array = average_item_price_array
-    standard_deviation = find_standard_deviation(array, "sample")
     average = array_average_value(array)
+    standard_deviation = find_standard_deviation(array, average, "sample")
     golden_value = average + (standard_deviation * 2)
     @sales_engine.items.all.find_all do |item|
       item.price > golden_value
     end
+  end
+
+#iteration 2
+
+#helper
+  def invoice_object_per_merchant
+    @sales_engine.invoices.all.group_by do |invoices|
+      invoices.merchant_id
+    end
+  end
+
+  def number_of_invoices_per_merchant
+    array = invoice_object_per_merchant.map do |merchant, invoices|
+      invoices = invoices.count
+    end
+  end
+#required
+  def average_invoices_per_merchant
+    (@sales_engine.invoices.all.count / @sales_engine.merchants.all.count.to_f).round(2)
+  end
+#required
+  def average_invoices_per_merchant_standard_deviation
+      array = number_of_invoices_per_merchant
+      average = average_invoices_per_merchant
+      find_standard_deviation(array, average, "sample")
+  end
+
+#helper
+
+  def merchant_and_invoice_count_hash
+    hash = Hash.new
+    invoice_object_per_merchant.each do |id, invoice_array|
+      hash[id] = invoice_array.length
+    end
+    hash
+  end
+#helper
+  def top_invoice_threshold
+    average_invoices_per_merchant + (average_invoices_per_merchant_standard_deviation * 2)
+  end
+
+  def bottom_invoice_threshold
+    average_invoices_per_merchant - (average_invoices_per_merchant_standard_deviation * 2)
+  end
+#helper
+  def merchant_ids_with_high_item_count(hash, number)
+    id_array = find_high_value_counts_by_id(hash, number)
+    merchants_with_high_value_count(id_array)
+  end
+
+  def top_merchants_by_invoice_count
+    hash = merchant_and_invoice_count_hash
+    number = top_invoice_threshold
+    merchant_ids_with_high_item_count(hash, number)
+  end
+
+  def merchant_ids_with_low_item_count(hash, number)
+    id_array = find_low_value_counts_by_id(hash, number)
+    merchants_with_high_value_count(id_array)
+  end
+
+  def bottom_merchants_by_invoice_count
+    hash = merchant_and_invoice_count_hash
+    number = bottom_invoice_threshold
+    merchant_ids_with_low_item_count(hash, number)
+  end
+
+  def average_invoices_per_day
+    (@sales_engine.invoices.all.count / 7).round(2)
+  end
+#required
+  def average_invoices_per_day_standard_deviation
+      array = number_of_invoices_per_day
+      average = average_invoices_per_day
+      find_standard_deviation(array, average, "sample")
+  end
+
+  def top_days_by_invoice_count
+    array = []
+    hash = invoice_object_per_day
+    number = average_invoices_per_day + average_invoices_per_day_standard_deviation
+    hash.map do |key, invoice_objects|
+      if invoice_objects.count > number
+        array << key.capitalize
+      else nil
+      end
+    end
+    array
+  end
+
+  def invoice_object_per_day
+    @sales_engine.invoices.all.group_by do |invoice|
+      invoice.day
+    end
+  end
+
+  def number_of_invoices_per_day
+    array = invoice_object_per_day.map do |day, invoice_items|
+      invoice_items = invoice_items.count
+    end
+  end
+
+  def invoice_object_per_status
+    @sales_engine.invoices.all.group_by do |invoice_obj|
+      invoice_obj.status
+    end
+  end
+
+  def invoice_status(status)
+    status = status.to_sym
+    total_per_status = invoice_object_per_status[status]
+    total_status_count = total_per_status.length
+    total_invoices = @sales_engine.invoices.all.length
+    percentage = ((total_status_count.to_f / total_invoices.to_f) * 100).round(2)
   end
 
 end

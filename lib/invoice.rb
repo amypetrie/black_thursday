@@ -20,13 +20,19 @@ attr_accessor :status,
     @id = item_hash[:id].to_i
     @customer_id = item_hash[:customer_id].to_i
     @merchant_id = item_hash[:merchant_id].to_i
-    @status = item_hash[:status]
+    @status = item_hash[:status].to_sym
     @created_at = Time.parse((item_hash[:created_at].to_s))
     @updated_at = Time.parse((item_hash[:updated_at].to_s))
   end
 
   def create_id(new_id)
     @id = new_id
+  end
+
+  def day
+    days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+    day_of_week = @created_at.wday
+    days[day_of_week]
   end
 
 end

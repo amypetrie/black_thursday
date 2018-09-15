@@ -36,7 +36,7 @@ include RepoMethods
   end
 
   def find_all_by_status(status)
-    status = status.to_s
+    status = status.to_sym
     all.find_all do |object|
       object.status == status
     end
