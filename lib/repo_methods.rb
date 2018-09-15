@@ -28,26 +28,16 @@ module RepoMethods
     end.id.to_i
   end
 
-## standard deviation
-
-  def object_value_array(attribute)
-    array = all.map do |object|
-      object.attribute
-    end
-  end
-
-  def array_average_value(attribute)
-    array = object_value_array(attribute)
-    array.reduce(0) do |sum, value|
+  def array_average_value(array)
+    sum = array.reduce(0) do |sum, value|
       sum += value
       sum
     end
     avg = (sum / array.length)
-    BigDecimal(avg).round(2)
   end
 
-  def standard_deviation_step_one(values_array, average)
-    values_array.map do |value|
+  def standard_deviation_step_one(array, average)
+    array.map do |value|
       (value - average)**2
     end
   end
@@ -60,23 +50,22 @@ module RepoMethods
   end
 
   def standard_deviation_step_three(step_two_value, step_one_array, deviation_type)
-    if deviation_type.to_s = "sample"
+    if deviation_type.to_s == "sample"
       denominator = step_one_array.length - 1
-    elsif deviation_type.to_s = "population"
+    elsif deviation_type.to_s == "population"
       denominator = step_one_array.length
     end
-    value = step_two_value / denominator
+    value = (step_two_value / denominator)
   end
 
   def standard_deviation_final_step(step_three_value)
     Math.sqrt(step_three_value).round(2)
   end
 
-  def find_standard_deviation(attribute, deviation_type)
-    values_array = object_value_array(attribute)
-    average = array_average_value(attribute)
-    step_one_array = standard_deviation_step_one(values_array, average)
-    step_two_value = standard_deviation_step_two(step_one_value_array)
+  def find_standard_deviation(array, deviation_type)
+    average = average_items_per_merchant
+    step_one_array = standard_deviation_step_one(array, average)
+    step_two_value = standard_deviation_step_two(step_one_array)
     step_three_value = standard_deviation_step_three(step_two_value, step_one_array, deviation_type)
     standard_deviation = standard_deviation_final_step(step_three_value)
   end

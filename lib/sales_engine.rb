@@ -38,21 +38,21 @@ class SalesEngine < CsvAdaptor
     invoices.invoice_array_from_file
   end
 
-  def merchant_array_from_file
-    merchant_array = []
-    load_merchants(merchant_file).each do |merchant_info|
-      merchant_array << Merchant.new(merchant_info)
-    end
-    merchant_array
-  end
-
-  def item_array_from_file
-    item_array = []
-    load_items(item_file).each do |item_info|
-      item_array << Item.new(item_info)
-    end
-    item_array
-  end
+  # def merchant_array_from_file
+  #   merchant_array = []
+  #   load_merchants(merchant_file).each do |merchant_info|
+  #     merchant_array << Merchant.new(merchant_info)
+  #   end
+  #   merchant_array
+  # end
+  #
+  # def item_array_from_file
+  #   item_array = []
+  #   load_items(item_file).each do |item_info|
+  #     item_array << Item.new(item_info)
+  #   end
+  #   item_array
+  # end
 
   def merchants
     mr
