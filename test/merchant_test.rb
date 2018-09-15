@@ -11,15 +11,19 @@ class MerchantTest < Minitest::Test
 
   def test_it_exists
     m = Merchant.new({:id => 5, :name => "Turing School"})
-
     assert_instance_of Merchant, m
   end
 
   def test_it_has_name_and_id_attributes
     m = Merchant.new({:id => 5, :name => "Turing School"})
-
     assert_equal 5, m.id
     assert_equal "Turing School", m.name
+  end
+
+  def test_create_id_creates_new_id
+    m = Merchant.new({:id => 5, :name => "Turing School"})
+    m.create_id(54678)
+    assert_equal 54678, m.create_id(54678)
   end
 
 end

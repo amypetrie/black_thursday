@@ -9,7 +9,7 @@ class Merchant
 
   attr_accessor :name
 
-  def initialize(attributes, created_at=Time.now, updated_at=Time.now)
+  def initialize(attributes, created_at= Time.now, updated_at=Time.now)
     @name = attributes[:name]
     @id = attributes[:id]
     @created_at = Time.parse((attributes[:created_at]).to_s)

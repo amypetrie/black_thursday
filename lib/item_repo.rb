@@ -25,12 +25,6 @@ class ItemRepo < CsvAdaptor
     @items
   end
 
-  # def load_all_items
-  #   load_items(data_file).each do |item_info|
-  #     @items << Item.new(item_info)
-  #   end
-  # end
-
   def find_by_id(id)
     @items.inject([]) do |items, item|
       if item.id == id

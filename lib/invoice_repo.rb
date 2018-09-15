@@ -28,6 +28,12 @@ include RepoMethods
     @invoices
   end
 
+  def find_by_id(id)
+    @invoices.find do |invoice|
+      invoice.id == id
+    end
+  end
+
   def find_all_by_customer_id(customer_id)
     customer_id = customer_id.to_i
     all.find_all do |object|
@@ -36,7 +42,7 @@ include RepoMethods
   end
 
   def find_all_by_status(status)
-    status = status.to_s
+    status = status.to_sym
     all.find_all do |object|
       object.status == status
     end
@@ -61,8 +67,10 @@ include RepoMethods
     invoice
   end
 
-
-
-
+  def delete(id)
+    @invoices.delete_if do |invoice|
+      invoice.id == id
+    end
+  end
 
 end
