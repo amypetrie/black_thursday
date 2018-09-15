@@ -44,6 +44,17 @@ class CsvAdaptor
     end
   end
 
-
+  def load_invoice_items(data_file)
+    csv_objs = CSV.read(data_file, headers: true, header_converters: :symbol)
+    csv_objs.map do |obj|
+      obj[:id] = obj[:id].to_i
+      obj[:item_id] = obj[:item_id].to_i
+      obj[:invoice_id] = obj[:invoice_id].to_i
+      obj[:quantity] = obj[:quantity]
+      obj[:created_at] = obj[:created_at]
+      obj[:updated] = obj[:updated]
+      obj.to_h
+    end
+  end
 
 end
