@@ -1,37 +1,22 @@
-require 'time'
-require 'bigdecimal'
-require_relative '../lib/sales_engine'
-require_relative '../lib/csv_adaptor'
-require_relative '../lib/merchant'
-require_relative '../lib/merchant_repo'
-require_relative '../lib/item'
-require_relative '../lib/item_repo'
+require_relative '../lib/repo_methods'
 
-class ItemRepo < CsvAdaptor
+class ItemRepo
+  include RepoMethods
 
   attr_reader :data_file,
               :items
 
-  def initialize(data_file, items=[])
+  def initialize(data_file, items)
     @data_file = data_file
     @items = items
   end
 
-  def all_item_characteristics(data_file)
-    load_items(data_file)
+  def load_repo(item_array)
+    @items = item_array.flatten
   end
 
   def all
     @items
-  end
-
-  def find_by_id(id)
-    @items.inject([]) do |items, item|
-      if item.id == id
-        return item
-      else
-      end
-    end
   end
 
   def find_by_name(name)
@@ -61,17 +46,8 @@ class ItemRepo < CsvAdaptor
     end
   end
 
-  def find_all_by_merchant_id(merchant_id)
-    merchant_id = merchant_id.to_i
-    @items.find_all do |item|
-      item.merchant_id == merchant_id
-    end
-  end
-
   def find_highest_item_id
-    @items.max_by do |item|
-      item.id
-    end.id.to_i
+    find_highest_object_id
   end
 
   def create(attributes)
@@ -87,24 +63,12 @@ class ItemRepo < CsvAdaptor
       do_nothing
     else
       item.name = attributes[:name] unless attributes[:name] == nil
-      item.description = attributes[:description]
-      item.unit_price = attributes[:unit_price]
+      item.description = attributes[:description] unless attributes[:description] == nil
+      item.unit_price = attributes[:unit_price] unless attributes[:unit_price] == nil
       time = Time.now
       item.updated_at = Time.now
     end
     item
-  end
-
-  def delete(id)
-    @items.delete_if do |item|
-      item.id == id
-    end
-  end
-
-  def item_array_from_file
-    load_items(data_file).each do |item_info|
-      @items << Item.new(item_info)
-    end
   end
 
 end

@@ -18,7 +18,7 @@ class CsvAdaptorTest < Minitest::Test
     a = CsvAdaptor.new
     data_file = "./data/merchants.csv"
 
-    assert_instance_of Array, a.load_merchants(data_file)
+    assert_instance_of Array, a.parse_merchants(data_file)
   end
 
 end
