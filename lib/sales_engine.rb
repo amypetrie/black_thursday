@@ -20,32 +20,45 @@ class SalesEngine < CsvAdaptor
               :merchant_file,
               :invoice_file,
               :invoice_item_file,
+              :transaction_file,
+              :customer_file,
+
               :mr,
               :ir,
               :invoices,
               :invoice_items
 
-  def self.from_csv(file_hash)
-    item_file = file_hash[:items]
-    merchant_file = file_hash[:merchants]
-    invoice_file = file_hash[:invoices]
-    invoice_item_file = file_hash[:invoice_items]
-      s = SalesEngine.new(item_file, merchant_file, invoice_file, invoice_item_file)
+  def self.from_csv(data)
+      engine = SalesEngine.new(data)
+      engine.load_repositories
   end
 
-  def initialize(item_file=item_file, merchant_file=merchant_file, invoice_file=invoice_file,invoice_item_file=invoice_item_file)
-    @invoice_file = invoice_file
-    @item_file = item_file
-    @merchant_file = merchant_file
-    @invoice_item_file = invoice_item_file
-    @mr = MerchantRepo.new(merchant_file)
-    mr.merchant_array_from_file
-    @ir = ItemRepo.new(item_file)
-    ir.item_array_from_file
-    @invoices = InvoiceRepo.new(invoice_file)
-    invoices.invoice_array_from_file
-    @invoice_items = InvoiceItemRepository.new(invoice_item_file)
-    invoice_items.invoice_item_array_from_file
+  def initialize(data)
+    @invoice_file ||=data[:invoice_file]
+    @item_file ||= data[:item_file]
+    @merchant_file ||= data[:merchant_file]
+    @invoice_item_file ||= data[:invoice_item_file]
+    @transaction_file ||= data[:transaction_file]
+    @customer_file ||=data[:customer_file]
+  end
+
+  def repositories
+    [@invoice_file, @item_file, @merchant_file,
+    @invoice_item_file, @transaction_file, @customer_file].compact
+  end
+
+  end
+
+  def load_repositories
+  end
+      @mr = MerchantRepo.new(merchant_file)
+      mr.merchant_array_from_file
+      @ir = ItemRepo.new(item_file)
+      ir.item_array_from_filee
+      @invoices = InvoiceRepo.new(invoice_file)
+      invoices.invoice_array_from_file
+      @invoice_items = InvoiceItemRepository.new(invoice_item_file)
+      invoice_items.invoice_item_array_from_file
   end
 
   # def merchant_array_from_file
