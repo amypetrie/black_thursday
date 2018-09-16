@@ -243,14 +243,17 @@ class SalesAnalyst < SalesEngine
 #Failed charges should never be counted in revenue totals or statistics.
 
   def invoice_paid_in_full?(invoice_id)
-    invoice_transactions = @sales_engine.transactions.find_by_invoice_id(invoice_id)
-    transactions_by_date = invoice_transactions.sort_by do |invoice_item|
-      invoice_item.updated_at
+    invoice_transactions = @sales_engine.transactions.find_all_by_invoice_id(invoice_id)
+    transactions_by_date = invoice_transactions.sort_by do |transaction|
+      transaction.updated_at
     end
-    if transactions_by_date[0].result == :success
+    if transactions_by_date.length == 0
+      return false
+    elsif transactions_by_date[0].result == :success
       return true
     else
       return false
     end
+  end
 
 end
