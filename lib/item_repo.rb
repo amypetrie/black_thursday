@@ -6,19 +6,21 @@ require_relative '../lib/merchant'
 require_relative '../lib/merchant_repo'
 require_relative '../lib/item'
 require_relative '../lib/item_repo'
+require_relative '../lib/repo_methods'
 
-class ItemRepo < CsvAdaptor
+class ItemRepo
+  include RepoMethods
 
   attr_reader :data_file,
               :items
 
-  def initialize(data_file, items=[])
+  def initialize(data_file, items)
     @data_file = data_file
     @items = items
   end
 
-  def all_item_characteristics(data_file)
-    load_items(data_file)
+  def load_repo(item_array)
+    @items = item_array.flatten
   end
 
   def all

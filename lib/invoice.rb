@@ -6,15 +6,17 @@ class Invoice
               :customer_id,
               :created_at,
               :merchant_id
+
 attr_accessor :status,
               :updated_at
-  def initialize(item_hash, created_at=Time.now, updated_at=Time.now)
-    @id = item_hash[:id].to_i
-    @customer_id = item_hash[:customer_id].to_i
-    @merchant_id = item_hash[:merchant_id].to_i
-    @status = item_hash[:status].to_sym
-    @created_at = Time.parse((item_hash[:created_at].to_s))
-    @updated_at = Time.parse((item_hash[:updated_at].to_s))
+
+  def initialize(attributes)
+    @id = attributes[:id]
+    @customer_id = attributes[:customer_id]
+    @merchant_id = attributes[:merchant_id]
+    @status = attributes[:status]
+    @created_at = attributes[:created_at]
+    @updated_at = attributes[:updated_at]
   end
 
   def create_id(new_id)

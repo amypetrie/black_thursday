@@ -66,6 +66,7 @@ class CsvAdaptor
       obj[:created_at] = obj[:created_at]
       obj[:updated_at] = obj[:updated_at]
       obj.to_h
+    end
   end
 
   def parse_customers(data_file)
@@ -77,6 +78,7 @@ class CsvAdaptor
       obj[:created_at] = obj[:created_at]
       obj[:updated_at] = obj[:updated_at]
       obj.to_h
+    end
   end
 
   def do_nothing

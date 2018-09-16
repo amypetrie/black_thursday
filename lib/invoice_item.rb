@@ -1,6 +1,7 @@
 require 'time'
 
 class InvoiceItem
+
   attr_reader :id,
               :item_id,
               :invoice_id,
@@ -15,8 +16,8 @@ class InvoiceItem
     @invoice_id =attributes[:invoice_id]
     @quantity = attributes[:quantity]
     @unit_price = attributes[:unit_price]
-    @created_at = Time.parse((attributes[:created_at]).to_s)
-    @updated_at = Time.parse((attributes[:updated_at]).to_s)
+    @created_at = attributes[:created_at]
+    @updated_at = attributes[:updated_at]
   end
 
   def unit_price_to_dollars

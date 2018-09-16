@@ -11,8 +11,10 @@ require_relative '../lib/invoice_repo'
 require_relative '../lib/invoice'
 require_relative '../lib/invoice_item_repository'
 require_relative '../lib/invoice_item'
-
-
+require_relative '../lib/customer'
+require_relative '../lib/customer_repository'
+require_relative '../lib/transaction'
+require_relative '../lib/transaction_repo'
 
 class SalesEngine < CsvAdaptor
 
@@ -22,78 +24,114 @@ class SalesEngine < CsvAdaptor
               :invoice_item_file,
               :transaction_file,
               :customer_file,
-
               :mr,
               :ir,
               :invoices,
-              :invoice_items
+              :invoice_item_repo,
+              :customer_repo,
+              :transaction_repo
 
   def self.from_csv(data)
-      engine = SalesEngine.new(data)
-      engine.load_repositories
+    engine = SalesEngine.new(data)
   end
 
   def initialize(data)
-    @invoice_file ||=data[:invoice_file]
-    @item_file ||= data[:item_file]
-    @merchant_file ||= data[:merchant_file]
-    @invoice_item_file ||= data[:invoice_item_file]
-    @transaction_file ||= data[:transaction_file]
-    @customer_file ||=data[:customer_file]
-  end
-
-  def repositories
-    [@invoice_file, @item_file, @merchant_file,
-    @invoice_item_file, @transaction_file, @customer_file].compact
-  end
-
-  def load_repositories
-    load_merchants(@merchant_file)
-    load_items(@item_file)
-    load_invoices(@invoice_file)
-    load_invoice_items(@invoice_items)
-    load_transactions(@transaction_file)
-    load_customers(@customer_file)
-  end
-
-
-  end
-    load_items(item_file).each do |item_info|
-        item_array << Item.new(item_info)
-      end
-  end
-      @mr = MerchantRepo.new(merchant_file)
-      mr.merchant_array_from_file
-      @ir = ItemRepo.new(item_file)
-      ir.item_array_from_filee
-      @invoices = InvoiceRepo.new(invoice_file)
-      invoices.invoice_array_from_file
-      @invoice_items = InvoiceItemRepository.new(invoice_item_file)
-      invoice_items.invoice_item_array_from_file
-  end
-
-  # def merchant_array_from_file
-  #   merchant_array = []
-  #   load_merchants(merchant_file).each do |merchant_info|
-  #     merchant_array << Merchant.new(merchant_info)
-  #   end
-  #   merchant_array
-  # end
-  #
-  # def item_array_from_file
-  #   item_array = []
-  #   load_items(item_file).each do |item_info|
-  #     item_array << Item.new(item_info)
-  #   end
-  #   item_array
-  # end
-
-  def merchants
-    mr
+    @invoice_file ||=data[:invoices]
+    @item_file ||= data[:items]
+    @merchant_file ||= data[:merchants]
+    @invoice_item_file ||= data[:invoice_items]
+    @transaction_file ||= data[:transactions]
+    @customer_file ||=data[:customers]
+    @ir = ItemRepo.new(@item_file, Array.new)
+    @ir.load_repo(original_items)
+    @mr = MerchantRepo.new(@merchant_file, Array.new)
+    @mr.load_repo(original_merchants)
+    @invoices = InvoiceRepo.new(@invoice_file, Array.new)
+    @invoices.load_repo(original_invoices)
+    @invoice_item_repo = InvoiceItemRepository.new(@invoice_item_file, Array.new)
+    @invoice_item_repo.load_repo(original_invoice_items)
+    @transaction_repo = TransactionRepo.new(@transaction_file, Array.new)
+    @transaction_repo.load_repo(original_transactions)
+    @customer_repo = CustomerRepo.new(@customer_file, Array.new)
+    @customer_repo.load_repo(original_customers)
   end
 
   def items
-    ir
+    @ir
+  end
+
+  def merchants
+    @mr
+  end
+
+  def invoices
+    @invoices
+  end
+
+  def invoice_items
+    @invoice_item_repo
+  end
+
+  def transactions
+    @transaction_repo
+  end
+
+  def customers
+    @customer_repo
+  end
+
+  def original_items
+    item_array = []
+    item_data = parse_items(@item_file)
+    item_data.each do |item_info|
+        item_array << Item.new(item_info)
+      end
+    item_array
+  end
+
+  def original_merchants
+    merchant_array = []
+    merchant_data = parse_merchants(@merchant_file)
+    merchant_data.each do |merchant_info|
+        merchant_array << Merchant.new(merchant_info)
+    end
+    merchant_array
+  end
+
+  def original_invoices
+    invoice_array = []
+    invoice_data = parse_invoices(@invoice_file)
+    invoice_data.each do |invoice_info|
+        invoice_array << Invoice.new(invoice_info)
+    end
+    invoice_array
+  end
+
+  def original_invoice_items
+    invoice_items = []
+    invoice_item_data = parse_invoice_items(@invoice_file)
+    invoice_item_data.each do |invoice_info|
+        invoice_items << InvoiceItem.new(invoice_info)
+    end
+    invoice_items
+  end
+
+  def original_customers
+    customers = []
+    customer_data = parse_customers(@customer_file)
+    customer_data.each do |customer_info|
+        customers << Customer.new(customer_info)
+    end
+    customers
+  end
+
+  def original_transactions
+    transactions = []
+    transaction_data = parse_transactions(@transaction_file)
+    transaction_data.each do |transaction_info|
+        transactions << Transaction.new(transaction_info)
+    end
+    transactions
   end
 
   def analyst

@@ -13,15 +13,13 @@ class InvoiceRepo < CsvAdaptor
 include RepoMethods
   attr_reader :data_file,
               :invoices
-  def initialize(data_file, invoices=[])
+  def initialize(data_file, invoices)
     @data_file = data_file
     @invoices = invoices
   end
 
-  def invoice_array_from_file
-    load_invoices(data_file).each do |invoice_info|
-      @invoices << Invoice.new(invoice_info)
-    end
+  def load_repo(invoice_array)
+    @invoices = invoice_array.flatten
   end
 
   def all
