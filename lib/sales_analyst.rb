@@ -235,4 +235,15 @@ class SalesAnalyst < SalesEngine
     percentage = ((total_status_count.to_f / total_invoices.to_f) * 100).round(2)
   end
 
+  def invoice_paid_in_full?(invoice_id)
+    # invoice_id = invoice_id.to_i
+    invoice = @sales_engine.invoices.find_by_id(invoice_id)
+    # binding.pry
+    if invoice.status == :shipped || invoice.status == :pending
+      return true
+    else
+      return false
+    end
+  end
+
 end

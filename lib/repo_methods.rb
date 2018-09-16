@@ -1,5 +1,8 @@
 module RepoMethods
 
+  def do_nothing
+  end
+
   def find_by_id(id)
     all.inject([]) do |objects, object|
       if object.id == id
@@ -19,6 +22,27 @@ module RepoMethods
     merchant_id = merchant_id.to_i
     all.find_all do |object|
       object.merchant_id == merchant_id
+    end
+  end
+
+  def find_all_by_invoice_id(invoice_id)
+    invoice_id = invoice_id.to_i
+    all.find_all do |object|
+      object.invoice_id == invoice_id
+    end
+  end
+
+  def find_all_by_credit_card_number(credit_card_number)
+    credit_card_number = credit_card_number.to_s
+    all.find_all do |object|
+      object.credit_card_number == credit_card_number
+    end
+  end
+
+  def find_all_by_result(result)
+    result = result.to_sym
+    all.find_all do |object|
+      object.result == result
     end
   end
 
@@ -116,4 +140,5 @@ module RepoMethods
     end
     final_array
   end
+
 end

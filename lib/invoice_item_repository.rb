@@ -1,28 +1,22 @@
-require 'time'
-require 'bigdecimal'
-require_relative '../lib/sales_engine'
-require_relative '../lib/csv_adaptor'
-require_relative '../lib/invoice_item'
-class InvoiceItemRepository < CsvAdaptor
+require_relative "../lib/repo_methods"
+
+class InvoiceItemRepository
+  include RepoMethods
+
   attr_reader :data_file,
               :invoice_items
-  def initialize(data_file,invoice_items=[])
-    @data_file = data_file
-    @invoice_items = []
-  end
 
-  def all_invoice_item_characteristics(data_file)
-    load_invoice_items(data_file)
+  def initialize(data_file, invoice_items)
+    @data_file = data_file
+    @invoice_items = invoice_items
   end
 
   def all
-    @items
+    @invoice_items
   end
 
-  def find_by_id(id)
-    @merchants.find do |merchant|
-      merchant.id == id
-    end
+  def load_repo(invoice_item_array)
+    @invoice_items = invoice_item_array.flatten
   end
 
   def find_all_by_item_id(item_id)
@@ -64,18 +58,7 @@ class InvoiceItemRepository < CsvAdaptor
     end
   end
 
-  def delete(id)
-    @invoices_items.delete_if do |invoice|
-      invoice.id == id
-    end
+  def inspect
+    "#<#{self.class} #{@merchants.size} rows>"
   end
-
-  def invoice_item_array_from_file
-    invoice_item_array = []
-    load_invoice_items(@data_file).each do |invoice_info|
-      invoice_item_array << InvoiceItem.new(invoice_info)
-    end
-    invoice_item_array
-  end
-
 end
