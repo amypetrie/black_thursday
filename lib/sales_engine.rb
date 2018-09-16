@@ -47,9 +47,20 @@ class SalesEngine < CsvAdaptor
     @invoice_item_file, @transaction_file, @customer_file].compact
   end
 
+  def load_repositories
+    load_merchants(@merchant_file)
+    load_items(@item_file)
+    load_invoices(@invoice_file)
+    load_invoice_items(@invoice_items)
+    load_transactions(@transaction_file)
+    load_customers(@customer_file)
   end
 
-  def load_repositories
+
+  end
+    load_items(item_file).each do |item_info|
+        item_array << Item.new(item_info)
+      end
   end
       @mr = MerchantRepo.new(merchant_file)
       mr.merchant_array_from_file
