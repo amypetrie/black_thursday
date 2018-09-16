@@ -20,8 +20,8 @@ class InvoiceItemRepository < CsvAdaptor
   end
 
   def find_by_id(id)
-    @merchants.find do |merchant|
-      merchant.id == id
+    @invoice_items.find do |invoice|
+      invoice.id == id
     end
   end
 
