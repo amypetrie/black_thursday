@@ -1,18 +1,12 @@
-require 'time'
-require 'bigdecimal'
-require_relative '../lib/sales_engine'
-require_relative '../lib/csv_adaptor'
-require_relative '../lib/merchant'
-require_relative '../lib/merchant_repo'
-require_relative '../lib/item'
-require_relative '../lib/item_repo'
-require_relative '../lib/invoice'
 require_relative '../lib/repo_methods'
 
 class InvoiceRepo
+
 include RepoMethods
+
   attr_reader :data_file,
               :invoices
+
   def initialize(data_file, invoices)
     @data_file = data_file
     @invoices = invoices
@@ -24,12 +18,6 @@ include RepoMethods
 
   def all
     @invoices
-  end
-
-  def find_by_id(id)
-    @invoices.find do |invoice|
-      invoice.id == id
-    end
   end
 
   def find_all_by_customer_id(customer_id)
@@ -63,12 +51,6 @@ include RepoMethods
       invoice.updated_at = Time.now
     end
     invoice
-  end
-
-  def delete(id)
-    @invoices.delete_if do |invoice|
-      invoice.id == id
-    end
   end
 
 end

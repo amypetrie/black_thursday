@@ -1,4 +1,7 @@
+require_relative "../lib/repo_methods"
+
 class CustomerRepo
+
   include RepoMethods
 
   def initialize(data_file, customers)

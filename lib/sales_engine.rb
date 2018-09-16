@@ -1,5 +1,4 @@
 require 'pry'
-require_relative '../lib/sales_engine'
 require_relative '../lib/csv_adaptor'
 require_relative '../lib/merchant'
 require_relative '../lib/merchant_repo'
@@ -13,8 +12,10 @@ require_relative '../lib/customer'
 require_relative '../lib/customer_repository'
 require_relative '../lib/transaction'
 require_relative '../lib/transaction_repo'
+require_relative '../lib/repo_methods'
 
 class SalesEngine < CsvAdaptor
+  include RepoMethods
 
   attr_reader :item_file,
               :merchant_file,

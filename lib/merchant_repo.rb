@@ -1,10 +1,4 @@
-require 'time'
-require 'bigdecimal'
-require_relative '../lib/sales_engine'
-require_relative '../lib/csv_adaptor'
-require_relative '../lib/merchant'
-require_relative '../lib/item'
-require_relative '../lib/item_repo'
+require_relative '../lib/repo_methods'
 
 class MerchantRepo
   include RepoMethods
@@ -25,12 +19,6 @@ class MerchantRepo
     @merchants
   end
 
-  def find_by_id(id)
-    @merchants.find do |merchant|
-      merchant.id == id
-    end
-  end
-
   def find_by_name(name)
     @merchants.find do |merchant|
       merchant.name.downcase == name.downcase
@@ -44,14 +32,11 @@ class MerchantRepo
   end
 
   def find_highest_merchant_id
-    m = @merchants.max_by do |merchant|
-      merchant.id
-    end
-    m.id
+    find_highest_object_id
   end
 
   def create(attributes)
-    attributes[:id] = (find_highest_merchant_id + 1)
+    attributes[:id] = (find_highest_object_id + 1)
     attributes[:created_at] = Time.now
     attributes[:updated_at] = Time.now
     merchant = Merchant.new(attributes)
@@ -68,17 +53,5 @@ class MerchantRepo
       merchant.change_updated_at
     end
   end
-
-  def delete(id)
-    @merchants.delete_if do |merchant|
-      merchant.id == id
-    end
-  end
-  #
-  # def merchant_array_from_file
-  #   load_merchants(data_file).each do |merchant_info|
-  #     @merchants << Merchant.new(merchant_info)
-  #   end
-  # end
 
 end

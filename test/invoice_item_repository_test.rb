@@ -31,6 +31,6 @@ class InvoiceItemRepositoryTest < MiniTest::Test
       :invoice_items => "./data/invoice_items.csv"
     })
     ii = se.invoice_items
-    assert_equal "", ii.all
+    assert_equal 4985, ii.all.length
   end
 end
