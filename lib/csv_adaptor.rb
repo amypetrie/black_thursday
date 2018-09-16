@@ -56,6 +56,7 @@ class CsvAdaptor
   end
 
   def parse_transactions(data_file)
+    do_nothing if data_file == nil
     csv_objs = CSV.read(data_file, headers: true, header_converters: :symbol)
     csv_objs.map do |obj|
       obj[:id] = obj[:id].to_i
@@ -79,9 +80,6 @@ class CsvAdaptor
       obj[:updated_at] = obj[:updated_at]
       obj.to_h
     end
-  end
-
-  def do_nothing
   end
 
 end

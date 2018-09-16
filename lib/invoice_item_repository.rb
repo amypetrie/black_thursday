@@ -5,6 +5,7 @@ require 'bigdecimal'
 # require_relative '../lib/invoice_item'
 
 class InvoiceItemRepository
+  include RepoMethods
 
   attr_reader :data_file,
               :invoice_items

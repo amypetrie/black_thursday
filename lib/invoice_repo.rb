@@ -9,7 +9,7 @@ require_relative '../lib/item_repo'
 require_relative '../lib/invoice'
 require_relative '../lib/repo_methods'
 
-class InvoiceRepo < CsvAdaptor
+class InvoiceRepo
 include RepoMethods
   attr_reader :data_file,
               :invoices

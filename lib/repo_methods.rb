@@ -1,5 +1,8 @@
 module RepoMethods
 
+  def do_nothing
+  end
+
   def find_by_id(id)
     all.inject([]) do |objects, object|
       if object.id == id

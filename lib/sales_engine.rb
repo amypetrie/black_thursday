@@ -1,6 +1,4 @@
 require 'pry'
-require 'time'
-require 'bigdecimal'
 require_relative '../lib/sales_engine'
 require_relative '../lib/csv_adaptor'
 require_relative '../lib/merchant'
@@ -82,54 +80,79 @@ class SalesEngine < CsvAdaptor
 
   def original_items
     item_array = []
-    item_data = parse_items(@item_file)
-    item_data.each do |item_info|
+    if @item_file == nil
+      do_nothing
+    else
+      item_data = parse_items(@item_file)
+      item_data.each do |item_info|
         item_array << Item.new(item_info)
       end
+    end
     item_array
   end
 
   def original_merchants
     merchant_array = []
-    merchant_data = parse_merchants(@merchant_file)
-    merchant_data.each do |merchant_info|
+    if @merchant_file == nil
+      do_nothing
+    else
+      merchant_data = parse_merchants(@merchant_file)
+      merchant_data.each do |merchant_info|
         merchant_array << Merchant.new(merchant_info)
+      end
     end
     merchant_array
   end
 
   def original_invoices
     invoice_array = []
-    invoice_data = parse_invoices(@invoice_file)
-    invoice_data.each do |invoice_info|
+    if @invoice_file == nil
+      do_nothing
+    else
+      invoice_data = parse_invoices(@invoice_file)
+      invoice_data.each do |invoice_info|
         invoice_array << Invoice.new(invoice_info)
+      end
     end
     invoice_array
   end
 
   def original_invoice_items
     invoice_items = []
-    invoice_item_data = parse_invoice_items(@invoice_file)
-    invoice_item_data.each do |invoice_info|
-        invoice_items << InvoiceItem.new(invoice_info)
+    if @invoice_file == nil
+      do_nothing
+    else
+      invoice_items = []
+      invoice_item_data = parse_invoice_items(@invoice_file)
+      invoice_item_data.each do |invoice_info|
+          invoice_items << InvoiceItem.new(invoice_info)
+      end
     end
     invoice_items
   end
 
   def original_customers
     customers = []
-    customer_data = parse_customers(@customer_file)
-    customer_data.each do |customer_info|
-        customers << Customer.new(customer_info)
+    if @customer_file == nil
+      do_nothing
+    else
+      customer_data = parse_customers(@customer_file)
+      customer_data.each do |customer_info|
+          customers << Customer.new(customer_info)
+      end
     end
     customers
   end
 
   def original_transactions
     transactions = []
-    transaction_data = parse_transactions(@transaction_file)
-    transaction_data.each do |transaction_info|
+    if @transaction_file == nil
+      do_nothing
+    else
+      transaction_data = parse_transactions(@transaction_file)
+      transaction_data.each do |transaction_info|
         transactions << Transaction.new(transaction_info)
+      end
     end
     transactions
   end

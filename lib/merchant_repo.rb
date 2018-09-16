@@ -6,7 +6,8 @@ require_relative '../lib/merchant'
 require_relative '../lib/item'
 require_relative '../lib/item_repo'
 
-class MerchantRepo < CsvAdaptor
+class MerchantRepo
+  include RepoMethods
 
   attr_reader :merchants,
               :data_file

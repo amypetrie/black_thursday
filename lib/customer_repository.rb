@@ -1,4 +1,5 @@
 class CustomerRepo
+  include RepoMethods
 
   def initialize(data_file, customers)
     @data_file = data_file
