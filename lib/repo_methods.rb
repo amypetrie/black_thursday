@@ -32,6 +32,13 @@ module RepoMethods
     end
   end
 
+  def find_all_by_item_id(item_id)
+    item_id = item_id.to_i
+    all.find_all do |object|
+      object.item_id == item_id
+    end
+  end
+
   def find_all_by_credit_card_number(credit_card_number)
     credit_card_number = credit_card_number.to_s
     all.find_all do |object|

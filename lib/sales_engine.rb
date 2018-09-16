@@ -120,13 +120,13 @@ class SalesEngine < CsvAdaptor
 
   def original_invoice_items
     invoice_items = []
-    if @invoice_file == nil
+    if @invoice_item_file == nil
       do_nothing
     else
       invoice_items = []
-      invoice_item_data = parse_invoice_items(@invoice_file)
-      invoice_item_data.each do |invoice_info|
-          invoice_items << InvoiceItem.new(invoice_info)
+      invoice_item_data = parse_invoice_items(@invoice_item_file)
+      invoice_item_data.each do |invoice_item_info|
+          invoice_items << InvoiceItem.new(invoice_item_info)
       end
     end
     invoice_items
