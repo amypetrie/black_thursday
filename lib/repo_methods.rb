@@ -4,6 +4,7 @@ module RepoMethods
   end
 
   def find_by_id(id)
+    id = id.to_i
     all.inject([]) do |objects, object|
       if object.id == id
         return object

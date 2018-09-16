@@ -235,15 +235,22 @@ class SalesAnalyst < SalesEngine
     percentage = ((total_status_count.to_f / total_invoices.to_f) * 100).round(2)
   end
 
+#sales_analyst.invoice_paid_in_full?(
+#invoice_id) returns true if the Invoice
+#with the corresponding id is paid in full
+#An invoice is considered paid in full
+#if it has a successful transaction
+#Failed charges should never be counted in revenue totals or statistics.
+
   def invoice_paid_in_full?(invoice_id)
-    # invoice_id = invoice_id.to_i
-    invoice = @sales_engine.invoices.find_by_id(invoice_id)
-    # binding.pry
-    if invoice.status == :shipped || invoice.status == :pending
+    invoice_transactions = @sales_engine.transactions.find_by_invoice_id(invoice_id)
+    transactions_by_date = invoice_transactions.sort_by do |invoice_item|
+      invoice_item.updated_at
+    end
+    if transactions_by_date[0].result == :success
       return true
     else
       return false
     end
-  end
 
 end

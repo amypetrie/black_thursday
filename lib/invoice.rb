@@ -11,7 +11,7 @@ attr_accessor :status,
               :updated_at
 
   def initialize(attributes)
-    @id = attributes[:id]
+    @id = attributes[:id].to_i
     @customer_id = attributes[:customer_id]
     @merchant_id = attributes[:merchant_id]
     @status = attributes[:status]
