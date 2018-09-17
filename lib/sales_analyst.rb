@@ -235,13 +235,6 @@ class SalesAnalyst < SalesEngine
     percentage = ((total_status_count.to_f / total_invoices.to_f) * 100).round(2)
   end
 
-#sales_analyst.invoice_paid_in_full?(
-#invoice_id) returns true if the Invoice
-#with the corresponding id is paid in full
-#An invoice is considered paid in full
-#if it has a successful transaction
-#Failed charges should never be counted in revenue totals or statistics.
-
   def invoice_paid_in_full?(invoice_id)
     invoice_transactions = @sales_engine.transactions.find_all_by_invoice_id(invoice_id)
     transactions_by_date = invoice_transactions.sort_by do |transaction|
@@ -254,6 +247,16 @@ class SalesAnalyst < SalesEngine
     else
       return false
     end
+  end
+
+  def invoice_total(invoice_id)
+    all_invoice_items = @sales_engine.invoice_items.find_all_by_invoice_id(invoice_id)
+    total = all_invoice_items.reduce(0) do |invoice_total, invoice_item|
+      invoice_total += invoice_item.total_price
+      invoice_total
+    end
+    bd_total = (total * 100).round(0)
+    total = (BigDecimal(bd_total) / 100)
   end
 
 end
