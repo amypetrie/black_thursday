@@ -283,47 +283,6 @@ class SalesAnalyst < SalesEngine
     BigDecimal(big_decimal) / 100
   end
 
-  # def invoice_ids_by_transaction_result(result)
-  #   transactions = @sales_engine.transactions.find_all_by_result(result)
-  #   invoice_ids = transactions.map do |transaction|
-  #     transaction.invoice_id
-  #   end
-  # end
-  #
-  # def invoices_by_transaction_result(result)
-  #   result = result.to_sym
-  #   invoices = []
-  #   invoice_ids_by_transaction_result(result).each do |invoice_id|
-  #     invoice = @sales_engine.invoices.find_by_id(invoice_id)
-  #     invoices << invoice
-  #   end
-  #   invoices
-  # end
-  #
-  # def merchants_by_transaction_result(result)
-  #   merchant_array = []
-  #   invoices_by_tranaction_result(result).each do |invoice|
-  #     @sales_engine.merchants.all.each do |merchant|
-  #       if merchant.id == invoice.merchant_id
-  #         merchant_array << merchant
-  #       end
-  #     end
-  #   end
-  #   merchant_array
-  # end
-  #
-  #
-  # def invoice_items_by_transaction_result(result)
-  #   items = []
-  #   invoices_by_transaction_result(result).each do |invoice|
-  #     id = invoice.id
-  #     item = @sales_engine.invoice_items.find_all_by_invoice_id(id)
-  #     items << item
-  #   end
-  #   items
-  # end
-  #
-
   def merchant_paid_invoices(merchant_id)
     merchant_invoices = @sales_engine.invoices.find_all_by_merchant_id(merchant_id)
     paid_invoices = []
@@ -364,4 +323,19 @@ class SalesAnalyst < SalesEngine
     merchants_ranked_by_revenue[(0..final_index)]
   end
 
+  def invoices_to_invoice_items(merchant_id)
+    invoices = merchant_paid_invoices(merchant_id)
+    items = invoices.map do |invoice|
+      @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
+    end
+  end
+
+
+  end
+# find the InvoiceItem with the highest quantity for a particular merchant
+  def most_sold_item_for_merchant(merchant_id)
+    invoices_to_invoice_items
+  end
+
+  end
 end
