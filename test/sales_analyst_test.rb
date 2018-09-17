@@ -201,18 +201,16 @@ class SalesAnalystTest < MiniTest::Test
   #   assert_instance_of BigDecimal, sales_analyst.total_revenue_by_date(date)
   # end
 
-  def test_merchants_by_transaction_status
+  def test_merchants_paid_invoices
     sales_engine = SalesEngine.from_csv({
-    :items     => "./data/items.csv",
-    :merchants => "./data/merchants.csv",
-    :invoices => "./data/invoices.csv",
-    :invoice_items => "./data/invoice_items.csv",
-    :transactions => "./data/transactions.csv",
-    :customers => "./data/customers.csv"
-    })
+      :items     => "./data/sample_item_data.csv",
+      :merchants => "./data/sample_merchant_file.csv",
+      :invoices => "./data/sample_invoices_data.csv",
+      :invoice_items => "./data/sample_invoice_item_data.csv",
+      :transactions => "./data/sample_transactions_file.csv",
+      :customers => "./data/sample_customer_file.csv"
+      })
     sales_analyst = sales_engine.analyst
-    sales_analyst.merchants_by_transaction_result(:success)
-
-    assert_equal "", sales_analyst.paid_for_invoice_items.length
+    assert_equal "", sales_analyst.merchant_paid_invoices(1233400)
   end
 end

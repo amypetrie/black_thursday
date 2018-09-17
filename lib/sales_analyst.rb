@@ -241,9 +241,10 @@ class SalesAnalyst < SalesEngine
     transactions_by_date = invoice_transactions.sort_by do |transaction|
       transaction.updated_at
     end
-    if transactions_by_date.length == 0
-      return false
-    elsif transactions_by_date[0].result == :success
+    results = transactions_by_date.map do |transaction|
+      transaction.result
+    end
+    if results.include? :success
       return true
     else
       return false
@@ -338,6 +339,8 @@ class SalesAnalyst < SalesEngine
     total = merchant_paid_invoices(merchant_id).inject(0) do |total, invoice|
       total += invoice_total(invoice.id)
     end
+    big_decimal = (total * 100).round(0)
+    BigDecimal(total) / 100
   end
 
   def merchant_to_revenue(merchant_id)
@@ -351,8 +354,14 @@ class SalesAnalyst < SalesEngine
     ranked = revenue_array.sort_by do |array|
       array[1]
     end
-    final = ranked.map do 
+    final = ranked.map do |array_pair|
+      @sales_engine.merchants.find_by_id(array_pair[0])
+    end.reverse
   end
 
+  def top_revenue_earners(num=20)
+    final_index = num - 1
+    merchants_ranked_by_revenue[(0..final_index)]
+  end
 
 end
