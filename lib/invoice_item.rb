@@ -28,4 +28,8 @@ class InvoiceItem
     @id = new_id.to_i
   end
 
+  def total_price
+    unit_price_to_dollars * @quantity.to_i
+  end
+
 end
