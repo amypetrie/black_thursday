@@ -56,4 +56,18 @@ class ItemTest < Minitest::Test
     assert_equal 40, i.create_id(40)
   end
 
+  def test_price_returns_the_price
+    i = Item.new({
+      :id          => 1,
+      :name        => "Pencil",
+      :description => "You can use it to write things",
+      :unit_price  => 6000,
+      :created_at  => Time.now,
+      :updated_at  => Time.now,
+      :merchant_id => 2
+    })
+
+    assert_equal 60, i.price
+  end
+
 end

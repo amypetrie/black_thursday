@@ -256,4 +256,8 @@ class SalesAnalyst < SalesEngine
     end
   end
 
+  def invoice_total
+    
+  end
+
 end
