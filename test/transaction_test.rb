@@ -44,4 +44,17 @@ class TransactionTest < Minitest::Test
     assert_equal :success, t.result
   end
 
+  def test_last_updated_date_returns_plain_date_string
+    t = Transaction.new({
+    :id => 6,
+    :invoice_id => 8,
+    :credit_card_number => "4242424242424242",
+    :credit_card_expiration_date => "0220",
+    :result => "success",
+    :created_at => Time.now,
+    :updated_at => Time.now
+    })
+
+    assert_equal "2018-09-17", t.last_updated_date
+  end
 end

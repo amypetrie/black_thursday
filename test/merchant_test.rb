@@ -26,4 +26,15 @@ class MerchantTest < Minitest::Test
     assert_equal 54678, m.create_id(54678)
   end
 
+  def test_change_name_can_change_name
+    m = Merchant.new({:id => 5, :name => "Turing School"})
+    assert_equal "Roger", m.change_name("Roger")
+  end
+
+  def test_change_updated_at
+    skip
+    m = Merchant.new({:id => 5, :name => "Turing School"})
+    assert_equal Time.now.p, m.change_updated_at
+  end
+
 end

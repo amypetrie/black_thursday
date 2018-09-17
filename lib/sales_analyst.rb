@@ -1,4 +1,5 @@
 require_relative '../lib/repo_methods'
+require 'time'
 require 'pry'
 
 class SalesAnalyst < SalesEngine
@@ -240,9 +241,10 @@ class SalesAnalyst < SalesEngine
     transactions_by_date = invoice_transactions.sort_by do |transaction|
       transaction.updated_at
     end
-    if transactions_by_date.length == 0
-      return false
-    elsif transactions_by_date[0].result == :success
+    results = transactions_by_date.map do |transaction|
+      transaction.result
+    end
+    if results.include? :success
       return true
     else
       return false
@@ -257,6 +259,109 @@ class SalesAnalyst < SalesEngine
     end
     bd_total = (total * 100).round(0)
     total = (BigDecimal(bd_total) / 100)
+  end
+
+  #iteration4
+
+  def total_revenue_by_date(date)#=> $$
+    revenue_date = [date.year, date.month, date.day]
+    invoices_by_date = @sales_engine.invoices.all.find_all do |invoice|
+      invoice.created_at_date == revenue_date
+    end
+    invoice_ids = invoices_by_date.map {|invoice| invoice.id}
+    invoice_items = []
+    invoice_ids.each do |invoice_id|
+      invoice_items << @sales_engine.invoice_items.find_all_by_invoice_id(invoice_id)
+    end
+    prices = invoice_items.flatten.map do |item|
+      item.total_price
+    end
+    total = prices.inject(0) do |total, price|
+      total += price
+    end
+    big_decimal = (total * 100).round(0)
+    BigDecimal(big_decimal) / 100
+  end
+
+  # def invoice_ids_by_transaction_result(result)
+  #   transactions = @sales_engine.transactions.find_all_by_result(result)
+  #   invoice_ids = transactions.map do |transaction|
+  #     transaction.invoice_id
+  #   end
+  # end
+  #
+  # def invoices_by_transaction_result(result)
+  #   result = result.to_sym
+  #   invoices = []
+  #   invoice_ids_by_transaction_result(result).each do |invoice_id|
+  #     invoice = @sales_engine.invoices.find_by_id(invoice_id)
+  #     invoices << invoice
+  #   end
+  #   invoices
+  # end
+  #
+  # def merchants_by_transaction_result(result)
+  #   merchant_array = []
+  #   invoices_by_tranaction_result(result).each do |invoice|
+  #     @sales_engine.merchants.all.each do |merchant|
+  #       if merchant.id == invoice.merchant_id
+  #         merchant_array << merchant
+  #       end
+  #     end
+  #   end
+  #   merchant_array
+  # end
+  #
+  #
+  # def invoice_items_by_transaction_result(result)
+  #   items = []
+  #   invoices_by_transaction_result(result).each do |invoice|
+  #     id = invoice.id
+  #     item = @sales_engine.invoice_items.find_all_by_invoice_id(id)
+  #     items << item
+  #   end
+  #   items
+  # end
+  #
+
+  def merchant_paid_invoices(merchant_id)
+    merchant_invoices = @sales_engine.invoices.find_all_by_merchant_id(merchant_id)
+    paid_invoices = []
+    merchant_invoices.each do |invoice|
+      if invoice_paid_in_full?(invoice.id) == true
+        paid_invoices << invoice
+      end
+    end
+    paid_invoices
+  end
+
+  def revenue_by_merchant(merchant_id)
+    total = merchant_paid_invoices(merchant_id).inject(0) do |total, invoice|
+      total += invoice_total(invoice.id)
+    end
+    big_decimal = (total * 100).round(0)
+    BigDecimal(total) / 100
+  end
+
+  def merchant_to_revenue(merchant_id)
+    [merchant_id, revenue_by_merchant(merchant_id)]
+  end
+
+  def merchants_ranked_by_revenue
+    revenue_array = @sales_engine.merchants.all.map do |merchant|
+      merchant_to_revenue(merchant.id)
+    end
+    ranked = revenue_array.sort_by do |array|
+      array[1]
+    end
+    final = ranked.map do |array_pair|
+      @sales_engine.merchants.find_by_id(array_pair[0])
+    end.reverse
+  end
+
+  def top_revenue_earners(num=20)
+    final_index = num - 1
+    merchants_ranked_by_revenue[(0..final_index)]
   end
 
 end
