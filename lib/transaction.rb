@@ -1,3 +1,4 @@
+require 'time'
 class Transaction
 
   attr_reader :id,
@@ -15,8 +16,8 @@ class Transaction
     @credit_card_number = attributes[:credit_card_number]
     @invoice_id = attributes[:invoice_id].to_i
     @credit_card_expiration_date = attributes[:credit_card_expiration_date]
-    @created_at = attributes[:created_at]
-    @updated_at = attributes[:updated_at]
+    @created_at = Time.parse(attributes[:created_at].to_s)
+    @updated_at = Time.parse(attributes[:updated_at].to_s)
   end
 
   def change_updated_at
@@ -24,4 +25,9 @@ class Transaction
     updated_at = Time.parse(Time.now)
   end
 
+  def last_updated_date
+    string = @updated_at.to_s.split(" ")[0]
+    Time.parse(string)
+  end
+  
 end
