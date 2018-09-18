@@ -363,22 +363,16 @@ class SalesAnalyst < SalesEngine
   end
 
   def highest_total_price_item_id(merchant_id)
-    sort_invoice_items_by_revenue(merhcant_id).first.item_id
+    sort_invoice_items_by_revenue(merchant_id).first.item_id
   end
 
-  def sort_invoice_items_by_revenue(merhcant_id)
+  def sort_invoice_items_by_revenue(merchant_id)
     prices = paid_invoices_to_invoice_items(merchant_id).flatten.group_by do |invoice_item|
       invoice_item.total_price
     end
     max = prices.values.flatten.sort_by do |invoice_item|
       invoice_item.total_price
     end.reverse
-  end
-
-  def item_id_to_revenue(merchant_id)
-    hash = item_id_to_invoice_item_hash(merchant_id)
-    hash.each_key do |invoice_items|
-    end
   end
 
   def invoice_item_to_item_id(merchant_id)
