@@ -329,13 +329,30 @@ class SalesAnalyst < SalesEngine
       @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
     end
   end
-
-
-  end
 # find the InvoiceItem with the highest quantity for a particular merchant
   def most_sold_item_for_merchant(merchant_id)
-    invoices_to_invoice_items
+    highest_item_ids_per_merchant(merchant_id).map do |id|
+      @sales_engine.items.find_by_id(id)
+    end
   end
 
+  def highest_item_ids_per_merchant(merchant_id)
+    invoices_to_invoice_items(merchant_id).flatten.map do |invoice_item|
+      if invoice_item.quantity.to_i == highest_quantity_of_item_for_merchant(merchant_id)
+        invoice_item.item_id
+      end
+    end.compact
   end
+
+  def highest_quantity_of_item_for_merchant(merchant_id)
+    quantities = invoices_to_invoice_items(merchant_id).flatten.map do |item|
+      item.quantity.to_i
+    end
+    quantities.max
+  end
+
+  #first finding all of the Invoices associated with a Merchant,
+  #all the InvoiceItems associated with those Invoices, and then 
+  #all of the Items associated with those InvoiceItems.
+
 end
