@@ -364,4 +364,35 @@ class SalesAnalyst < SalesEngine
     merchants_ranked_by_revenue[(0..final_index)]
   end
 
+  def merchants_with_pending_invoices
+    merchant_ids = []
+    merchants = []
+
+    @sales_engine.invoices.all.map do |invoice|
+      if invoice.status.to_s == "pending"
+        merchant_ids << invoice.merchant_id
+        merchant_ids.uniq
+      end
+    end
+
+    merchant_ids.uniq.each do |merchant_id|
+      merchants << @sales_engine.merchants.find_by_id(merchant_id)
+    end
+    merchants
+  end
+
+  def merchants_with_only_one_item
+    @sales_engine.merchants.all.find_all do |merchant|
+      item_total = @sales_engine.items.find_all_by_merchant_id(merchant.id)
+      item_total.length == 1
+    end
+  end
+
+  def merchants_with_only_one_item_registered_in_month(month)
+    @sales_engine.merchants.all.find_all do |merchant|
+      item_total = @sales_engine.items.find_all_by_merchant_id(merchant.id)
+      item_total.length == 1 && merchant.created_at.strftime("%B") == month
+    end
+  end
+
 end
