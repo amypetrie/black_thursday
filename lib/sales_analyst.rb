@@ -238,10 +238,7 @@ class SalesAnalyst < SalesEngine
 
   def invoice_paid_in_full?(invoice_id)
     invoice_transactions = @sales_engine.transactions.find_all_by_invoice_id(invoice_id)
-    transactions_by_date = invoice_transactions.sort_by do |transaction|
-      transaction.updated_at
-    end
-    results = transactions_by_date.map do |transaction|
+    results = invoice_transactions.map do |transaction|
       transaction.result
     end
     if results.include? :success
@@ -381,23 +378,6 @@ class SalesAnalyst < SalesEngine
     end
   end
 
-  def merchants_with_pending_invoices
-    merchant_ids = []
-    merchants = []
-
-    @sales_engine.invoices.all.map do |invoice|
-      if invoice.status.to_s == "pending"
-        merchant_ids << invoice.merchant_id
-        merchant_ids.uniq
-      end
-    end
-
-    merchant_ids.uniq.each do |merchant_id|
-      merchants << @sales_engine.merchants.find_by_id(merchant_id)
-    end
-    merchants
-  end
-
   def merchants_with_only_one_item
     @sales_engine.merchants.all.find_all do |merchant|
       item_total = @sales_engine.items.find_all_by_merchant_id(merchant.id)
@@ -411,5 +391,56 @@ class SalesAnalyst < SalesEngine
       item_total.length == 1 && merchant.created_at.strftime("%B") == month
     end
   end
+
+  #ook for invoices only failed transactions (they must have transactions, but
+  #each of those transactions must be a failure).
+  #returns merchant array
+  def merchants_with_pending_invoices
+    merchant_ids = @sales_engine.invoices.all.map do |invoice|
+      ii = invoice.id
+      if invoice_paid_in_full?(ii) == false
+        invoice.merchant_id
+      else
+        nil
+      end
+    end
+    final_ids = merchant_ids.compact.uniq
+    final_ids.map do |id|
+      @sales_engine.merchants.find_by_id(id)
+    end.compact
+  end
+
+  #   pending_invoices = @sales_engine.invoices.all.find_all do |invoice|
+  #     invoice.status == :pending
+  #   end
+  #   merchants_with_pending_inv = pending_invoices.map do |pi|
+  #     pi.merchant_id
+  #   end
+  #   merchants_with_pending_inv = merchants_with_pending_inv.uniq
+  #   final = merchants_with_pending_inv.concat(merchants_with_pending_transactions).uniq
+  #   binding.pry
+  # end
+
+  # def merchants_with_pending_transactions
+  #   invoice_to_transactions = @sales_engine.transactions.all.group_by do |transaction|
+  #     transaction.invoice_id
+  #   end
+  #   invoice_results = invoice_to_transactions.each_pair do |invoice_id, transactions|
+  #       invoice_to_transactions[invoice_id] = transactions.map {|trans| trans.result}
+  #   end
+  #   success = []
+  #   pending = []
+  #   invoice_results.each_pair do |invoice_id, results|
+  #     if results.include? :success
+  #       success << invoice_id
+  #     else
+  #       pending << invoice_id
+  #     end
+  #   end
+  #   merchant_array = pending.map do |invoice_id|
+  #     @sales_engine.invoices.find_by_id(invoice_id).merchant_id
+  #   end
+  #   merchant_array.uniq
+  # end
 
 end
