@@ -323,9 +323,9 @@ class SalesAnalyst < SalesEngine
     merchants_ranked_by_revenue[(0..final_index)]
   end
 
-  def invoices_to_invoice_items(merchant_id)
+  def paid_invoices_to_invoice_items(merchant_id)
     invoices = merchant_paid_invoices(merchant_id)
-    items = invoices.map do |invoice|
+    invoice_items = invoices.map do |invoice|
       @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
     end
   end
@@ -336,8 +336,14 @@ class SalesAnalyst < SalesEngine
     end
   end
 
+  def paid_invoice_items_to_items(merchant_id)
+    items = paid_invoices_to_invoice_items(merchant_id).flatten.map do |invoice_item|
+      @sales_engine.items.find_by_id(invoice_item.item_id)
+    end
+  end
+
   def highest_item_ids_per_merchant(merchant_id)
-    invoices_to_invoice_items(merchant_id).flatten.map do |invoice_item|
+    paid_invoices_to_invoice_items(merchant_id).flatten.map do |invoice_item|
       if invoice_item.quantity.to_i == highest_quantity_of_item_for_merchant(merchant_id)
         invoice_item.item_id
       end
@@ -345,14 +351,44 @@ class SalesAnalyst < SalesEngine
   end
 
   def highest_quantity_of_item_for_merchant(merchant_id)
-    quantities = invoices_to_invoice_items(merchant_id).flatten.map do |item|
+    quantities = paid_invoices_to_invoice_items(merchant_id).flatten.map do |item|
       item.quantity.to_i
     end
     quantities.max
   end
 
+  def best_item_for_merchant(merchant_id)
+    id = highest_total_price_item_id(merchant_id)
+    @sales_engine.items.find_by_id(id)
+  end
+
+  def highest_total_price_item_id(merchant_id)
+    sort_invoice_items_by_revenue(merhcant_id).first.item_id
+  end
+
+  def sort_invoice_items_by_revenue(merhcant_id)
+    prices = paid_invoices_to_invoice_items(merchant_id).flatten.group_by do |invoice_item|
+      invoice_item.total_price
+    end
+    max = prices.values.flatten.sort_by do |invoice_item|
+      invoice_item.total_price
+    end.reverse
+  end
+
+  def item_id_to_revenue(merchant_id)
+    hash = item_id_to_invoice_item_hash(merchant_id)
+    hash.each_key do |invoice_items|
+    end
+  end
+
+  def invoice_item_to_item_id(merchant_id)
+    paid_invoices_to_invoice_items(merchant_id).flatten.group_by do |invoice_item|
+      invoice_item.item_id
+    end
+  end
+
   #first finding all of the Invoices associated with a Merchant,
-  #all the InvoiceItems associated with those Invoices, and then 
+  #all the InvoiceItems associated with those Invoices, and then
   #all of the Items associated with those InvoiceItems.
 
 end
