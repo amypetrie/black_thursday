@@ -7,6 +7,7 @@ class InvoiceItemRepository < CsvAdaptor
   def initialize(data_file,invoice_items=[])
     @data_file = data_file
     @invoice_items = []
+    @merchants = []
   end
 
   def all
@@ -44,13 +45,13 @@ class InvoiceItemRepository < CsvAdaptor
 
   def invoice_item_array_from_file
     invoice_item_array = []
-    load_invoice_items(@data_file).each do |invoice_info|
+    load_repo(@data_file).each do |invoice_info|
       invoice_item_array << InvoiceItem.new(invoice_info)
     end
     invoice_item_array
   end
 
   def inspect
-    "#<#{self.class} #{@merchants.size} rows>"
+    "#<#{self.class} #{@merchants.length} rows>"
   end
 end
