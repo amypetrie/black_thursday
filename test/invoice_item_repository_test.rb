@@ -53,36 +53,34 @@ class InvoiceItemRepositoryTest < MiniTest::Test
   end
 
   def test_create_creates_a_new_invoice_item
-    skip
     se = SalesEngine.from_csv({
       :invoice_items => "./data/invoice_items.csv"
     })
     attributes = {:id => 42, :item_id => 22, :invoice_id => 30000, :quantity => 20, :unit_price => 30, :created_at => Time.now, :updated_at => Time.now}
-    expected_1 = 42
+    expected_1 = 21831
     expected_2 = 30000
     created = se.invoice_items.create(attributes)
-    assert_equal expected_1, se.invoice_items.id
-    assert_equal expected_2, se.invoice_items.invoice_id
+    assert_equal expected_1, created.id
+    assert_equal expected_2, created.invoice_id
   end
 
   def test_update_updates_objects_attributes
     se = SalesEngine.from_csv({
       :invoice_items => "./data/invoice_items.csv"
     })
+    attributes = {:id => 42, :item_id => 22, :invoice_id => 30000, :quantity => 700, :unit_price => 400, :created_at => Time.now, :updated_at => Time.now}
+    ii = se.invoice_items
     id = 7
-    attributes = {:id => 42, :item_id => 22, :invoice_id => 30000, :quantity => 20, :unit_price => 30, :created_at => Time.now, :updated_at => Time.now}
-
-    assert_equal 42, se.invoice_items.update(id, attributes).id
-    assert_equal 22, se.invoice_items.update(id, attributes).item_id
-    assert_equal 30000, se.invoice_items.update(id, attributes).invoice_id
+    obj = ii.find_by_id(id)
+    ii.update(id, attributes)
+    assert_equal 700, obj.quantity
+    assert_equal 400, obj.unit_price
   end
 
   def test_delete_id_deletes_invoice_object_from_invoices_array
-
     se = SalesEngine.from_csv({
       :invoice_items => "./data/invoice_items.csv"
     })
-
     ir = se.invoice_items
     invoice_item = ir.find_by_id(9)
     ir.delete(9)

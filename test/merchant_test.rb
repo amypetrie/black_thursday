@@ -32,9 +32,9 @@ class MerchantTest < Minitest::Test
   end
 
   def test_change_updated_at
-    skip
     m = Merchant.new({:id => 5, :name => "Turing School"})
-    assert_equal Time.now.p, m.change_updated_at
+    expected = Time.now
+    assert_in_delta expected, m.change_updated_at
   end
 
 end

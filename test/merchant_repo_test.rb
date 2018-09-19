@@ -62,8 +62,8 @@ class MerchantRepoTest < Minitest::Test
     name = "amy"
     id = "12345"
 
-    assert_equal nil, mr.find_by_name(name)
-    assert_equal nil, mr.find_by_id(id)
+    assert_nil nil, mr.find_by_name(name)
+    assert_nil nil, mr.find_by_id(id)
   end
 
   def test_find_all_by_name_returns_merchants_with_name_fragment

@@ -381,22 +381,23 @@ class SalesAnalyst < SalesEngine
     end
   end
 
-  def merchants_with_pending_invoices
-    merchant_ids = []
-    merchants = []
-
-    @sales_engine.invoices.all.map do |invoice|
-      if invoice.status.to_s == "pending"
-        merchant_ids << invoice.merchant_id
-        merchant_ids.uniq
-      end
-    end
-
-    merchant_ids.uniq.each do |merchant_id|
-      merchants << @sales_engine.merchants.find_by_id(merchant_id)
-    end
-    merchants
-  end
+  # def merchants_with_pending_invoices
+  #   merchant_ids = []
+  #   merchants = []
+  #
+  #   @sales_engine.invoices.all.map do |invoice|
+  #     if invoice.status.to_s == "pending"
+  #       merchant_ids << invoice.merchant_id
+  #       merchant_ids.uniq
+  #     end
+  #   end
+  #
+  #   merchant_ids.uniq.each do |merchant_id|
+  #     merchants << @sales_engine.merchants.find_by_id(merchant_id)
+  #     binding.pry
+  #   end
+  #   merchants
+  # end
 
   def merchants_with_only_one_item
     @sales_engine.merchants.all.find_all do |merchant|

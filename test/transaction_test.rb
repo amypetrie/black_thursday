@@ -41,7 +41,7 @@ class TransactionTest < Minitest::Test
     assert_instance_of String, t.credit_card_expiration_date
     assert_instance_of Time, t.created_at
     assert_instance_of Time, t.updated_at
-    assert_equal :success, t.result
+    assert_equal "success", t.result
   end
 
   def test_last_updated_date_returns_plain_date_string

@@ -83,7 +83,6 @@ class ItemRepoTest < Minitest::Test
     })
 
     range = (0..200)
-    #unsure of this method
     assert_equal 8, se.items.find_all_by_price_in_range(range).count
   end
 
@@ -121,7 +120,6 @@ class ItemRepoTest < Minitest::Test
 
     id = 4378423
     attributes = {name: "TEST_ITEM", description: "Test Description", unit_price: 10}
-
     assert_equal "TEST_ITEM", se.items.update(id, attributes).name
     assert_equal "Test Description", se.items.update(id, attributes).description
     assert_equal 10, se.items.update(id, attributes).unit_price

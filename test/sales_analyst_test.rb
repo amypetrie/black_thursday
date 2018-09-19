@@ -14,17 +14,17 @@ require_relative '../lib/item_repo'
 require_relative '../lib/sales_analyst'
 
 class SalesAnalystTest < MiniTest::Test
-  # def test_it_exists
-  #   sales_engine = SalesEngine.from_csv({
-  #   :items     => "./data/items.csv",
-  #   :merchants => "./data/merchants.csv",
-  #   :invoices => "./data/invoices.csv",
-  #   :invoice_items => "./data/invoice_items.csv"
-  #   })
-  #
-  #   assert_instance_of SalesAnalyst, sales_engine.analyst
-  # end
-  #
+  def test_it_exists
+    sales_engine = SalesEngine.from_csv({
+    :items     => "./data/items.csv",
+    :merchants => "./data/merchants.csv",
+    :invoices => "./data/invoices.csv",
+    :invoice_items => "./data/invoice_items.csv"
+    })
+
+    assert_instance_of SalesAnalyst, sales_engine.analyst
+  end
+
   # def test_average_items_per_merchant
   #   sales_engine = SalesEngine.from_csv({
   #   :items     => "./data/items.csv",

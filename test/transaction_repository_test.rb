@@ -65,7 +65,7 @@ class TransactionRepoTest < MiniTest::Test
       :transactions => "./data/transactions.csv"
     })
 
-    result = "success"
+    result = :success
     assert_equal 4158, se.transactions.find_all_by_result(result).count
   end
 #
@@ -100,8 +100,8 @@ class TransactionRepoTest < MiniTest::Test
     })
 
     attributes = {id: 500, created_at: "2018-09-08", updated_at: 5}
-    expected_1 = 500
-    expected_2 = 5
+    expected_1 = 4986
+    expected_2 = Time.now
     assert_equal expected_1, se.transactions.create(attributes).id
     assert_equal expected_2, se.transactions.create(attributes).updated_at
   end
@@ -126,7 +126,6 @@ class TransactionRepoTest < MiniTest::Test
 
     transaction = se.transactions.find_by_id(2)
     se.transactions.delete(2)
-
-    refute se.transactions.include?(transaction)
+    refute se.transactions.all.include?(transaction)
   end
 end
