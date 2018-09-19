@@ -11,40 +11,34 @@ class SalesAnalyst < SalesEngine
     @sales_engine = sales_engine
   end
 
-# item repo helper method
   def average_items_per_merchant
     (@sales_engine.items.all.count / @sales_engine.merchants.all.count.to_f).round(2)
   end
 
-# item repo helper method
   def item_object_per_merchant
     @sales_engine.items.all.group_by do |item|
       item.merchant_id
     end
   end
 
-#merchant repo helper method
   def all_merchant_ids
     @sales_engine.merchants.all.map do |merchant|
       merchant.id.to_s
     end
   end
 
-# item repo helper method
   def number_of_items_per_merchant
     array = item_object_per_merchant.map do |merchant, items|
       items = items.count
     end
   end
 
-#required
   def average_items_per_merchant_standard_deviation
     array = number_of_items_per_merchant
     average = average_items_per_merchant
     find_standard_deviation(array, average, "sample")
   end
 
-#helper method
   def merchant_and_item_count_hash
     hash = Hash.new
     item_object_per_merchant.each do |id, item_array|
@@ -53,7 +47,6 @@ class SalesAnalyst < SalesEngine
     hash
   end
 
-#item repo helper method
   def find_merchant_ids_with_high_item_count
     hash = merchant_and_item_count_hash
     array = []
@@ -66,7 +59,6 @@ class SalesAnalyst < SalesEngine
     array
   end
 
-#required method
   def merchants_with_high_item_count
     array = []
     find_merchant_ids_with_high_item_count.each do |id|
@@ -79,7 +71,6 @@ class SalesAnalyst < SalesEngine
     array
   end
 
-#required method
   def average_item_price_for_merchant(id)
     id = id.to_s
     merchant_items = @sales_engine.items.find_all_by_merchant_id(id)
@@ -94,7 +85,6 @@ class SalesAnalyst < SalesEngine
     BigDecimal((sum / item_array.length)).round(2)
   end
 
-#required method
   def average_average_price_per_merchant
     average_price_array = all_merchant_ids.map do |id|
       average_item_price_for_merchant(id)
@@ -122,9 +112,6 @@ class SalesAnalyst < SalesEngine
     end
   end
 
-#iteration 2
-
-#helper
   def invoice_object_per_merchant
     @sales_engine.invoices.all.group_by do |invoices|
       invoices.merchant_id
@@ -136,18 +123,16 @@ class SalesAnalyst < SalesEngine
       invoices = invoices.count
     end
   end
-#required
+
   def average_invoices_per_merchant
     (@sales_engine.invoices.all.count / @sales_engine.merchants.all.count.to_f).round(2)
   end
-#required
+
   def average_invoices_per_merchant_standard_deviation
       array = number_of_invoices_per_merchant
       average = average_invoices_per_merchant
       find_standard_deviation(array, average, "sample")
   end
-
-#helper
 
   def merchant_and_invoice_count_hash
     hash = Hash.new
@@ -156,7 +141,7 @@ class SalesAnalyst < SalesEngine
     end
     hash
   end
-#helper
+
   def top_invoice_threshold
     average_invoices_per_merchant + (average_invoices_per_merchant_standard_deviation * 2)
   end
@@ -164,7 +149,7 @@ class SalesAnalyst < SalesEngine
   def bottom_invoice_threshold
     average_invoices_per_merchant - (average_invoices_per_merchant_standard_deviation * 2)
   end
-#helper
+
   def merchant_ids_with_high_item_count(hash, number)
     id_array = find_high_value_counts_by_id(hash, number)
     merchants_with_high_value_count(id_array)
@@ -190,7 +175,7 @@ class SalesAnalyst < SalesEngine
   def average_invoices_per_day
     (@sales_engine.invoices.all.count / 7).round(2)
   end
-#required
+
   def average_invoices_per_day_standard_deviation
       array = number_of_invoices_per_day
       average = average_invoices_per_day
@@ -258,9 +243,7 @@ class SalesAnalyst < SalesEngine
     total = (BigDecimal(bd_total) / 100)
   end
 
-  #iteration4
-
-  def total_revenue_by_date(date)#=> $$
+  def total_revenue_by_date(date)
     revenue_date = [date.year, date.month, date.day]
     invoices_by_date = @sales_engine.invoices.all.find_all do |invoice|
       invoice.created_at_date == revenue_date
@@ -326,7 +309,7 @@ class SalesAnalyst < SalesEngine
       @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
     end
   end
-# find the InvoiceItem with the highest quantity for a particular merchant
+
   def most_sold_item_for_merchant(merchant_id)
     highest_item_ids_per_merchant(merchant_id).map do |id|
       @sales_engine.items.find_by_id(id)
@@ -392,9 +375,6 @@ class SalesAnalyst < SalesEngine
     end
   end
 
-  #ook for invoices only failed transactions (they must have transactions, but
-  #each of those transactions must be a failure).
-  #returns merchant array
   def merchants_with_pending_invoices
     merchant_ids = @sales_engine.invoices.all.map do |invoice|
       ii = invoice.id

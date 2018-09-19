@@ -14,13 +14,6 @@ class InvoiceItemRepository < CsvAdaptor
     @invoice_items
   end
 
-  # def find_highest_invoice_id
-  #   m = @invoices_items.max_by do |invoice|
-  #     invoice.id
-  #   end
-  #   m.id
-  # end
-
   def load_repo(invoice_item_array)
     @invoice_items = invoice_item_array.flatten
   end
@@ -41,14 +34,6 @@ class InvoiceItemRepository < CsvAdaptor
       invoice_item.unit_price = attributes[:unit_price] unless attributes[:unit_price] == nil
       invoice_item.updated_at = Time.now
     end
-  end
-
-  def invoice_item_array_from_file
-    invoice_item_array = []
-    load_repo(@data_file).each do |invoice_info|
-      invoice_item_array << InvoiceItem.new(invoice_info)
-    end
-    invoice_item_array
   end
 
   def inspect

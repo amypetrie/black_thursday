@@ -25,13 +25,6 @@ class InvoiceItemRepositoryTest < MiniTest::Test
     assert_equal 21830, se.invoice_items.all.count
   end
 
-  def test_invoice_item_array_from_file_returns_items
-    se = SalesEngine.from_csv({
-      :invoice_items => "./data/invoice_items.csv"
-    })
-    assert_equal "", se.invoice_items.invoice_item_array_from_file
-  end
-
   def test_find_by_id_returns_matching_id
     se = SalesEngine.from_csv({
       :invoice_items => "./data/invoice_items.csv"

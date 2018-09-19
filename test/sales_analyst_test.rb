@@ -430,8 +430,9 @@ class SalesAnalystTest < MiniTest::Test
       :customers => "./data/sample_customer_file.csv"
       })
     sales_analyst = sales_engine.analyst
+    expected = nil
 
-    assert_equal nil, sales_analyst.best_item_for_merchant(1233400)
+    assert_equal expected, sales_analyst.best_item_for_merchant(1233400)
   end
 
   def test_highest_total_price_item_id

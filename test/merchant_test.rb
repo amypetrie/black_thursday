@@ -33,8 +33,8 @@ class MerchantTest < Minitest::Test
 
   def test_change_updated_at
     m = Merchant.new({:id => 5, :name => "Turing School"})
-    expected = Time.now
-    assert_in_delta expected, m.change_updated_at
+
+    assert_instance_of Time, m.change_updated_at
   end
 
 end
