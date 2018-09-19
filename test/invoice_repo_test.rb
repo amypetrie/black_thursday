@@ -64,11 +64,13 @@ class InvoiceRepoTest < MiniTest::Test
     se = SalesEngine.from_csv({
       :invoices => "./data/invoices.csv"
     })
-    attributes = {id: 777, created_at: "2018-09-08", merchant_id: 5}
-    expected_1 = 777
-    expected_2 = 5
-    assert_equal expected_1, se.invoices.create(attributes).id
-    assert_equal expected_2, se.invoices.create(attributes).merchant_id
+    ir = se.invoices
+    attributes = {id: 777, customer_id: 54, merchant_id: 20, status: "shipped", created_at: Time.now, updated_at: Time.now }
+    ir.create(attributes)
+    expected_1 = 4986
+    expected_2 = 54
+    assert_equal expected_1, ir.find_by_id(expected_1).id
+    assert_equal expected_2, ir.find_by_id(expected_1).customer_id
   end
 
   def test_update_will_update_status_attribute

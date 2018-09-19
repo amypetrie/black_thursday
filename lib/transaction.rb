@@ -12,7 +12,7 @@ class Transaction
 
   def initialize(attributes)
     @id = attributes[:id]
-    @result = attributes[:result].to_sym
+    @result = attributes[:result]
     @credit_card_number = attributes[:credit_card_number]
     @invoice_id = attributes[:invoice_id].to_i
     @credit_card_expiration_date = attributes[:credit_card_expiration_date]
@@ -29,5 +29,5 @@ class Transaction
     string = @updated_at.to_s.split(" ")[0]
     Time.parse(string)
   end
-  
+
 end

@@ -25,4 +25,9 @@ class InvoiceItemTest < MiniTest::Test
     invoice_item = InvoiceItem.new({:id => 42, :item_id => 22, :invoice_id => 30000, :quantity => 20, :unit_price => 30, :created_at => Time.now, :updated_at => Time.now})
     assert_equal 44, invoice_item.create_id(44)
   end
+
+  def test_total_price_returns_total_price
+    invoice_item = InvoiceItem.new({:id => 42, :item_id => 22, :invoice_id => 30000, :quantity => 20, :unit_price => 30, :created_at => Time.now, :updated_at => Time.now})
+    assert_equal 6, invoice_item.total_price
+  end
 end

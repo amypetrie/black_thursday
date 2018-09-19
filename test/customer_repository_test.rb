@@ -59,17 +59,21 @@ class CustomerRepositoryTest < MiniTest::Test
       :customers => "./data/customers.csv"
     })
     attributes = {id: 200, first_name: "Ankh", last_name: "Semahj"}
-    assert_equal "", se.customer_repo.update(1,attributes).first_name
+    cr = se.customers
+    id = 1
+    obj = cr.find_by_id(id)
+    cr.update(id, attributes)
+    assert_equal "Ankh", obj.first_name
+    assert_equal "Semahj", obj.last_name
   end
 
   def test_delete_deletes_object_with_matching_id
     se = SalesEngine.from_csv({
       :customers => "./data/customers.csv"
     })
-
-    customer = se.customer_repo.find_by_id(4378423)
-    se.customer_repo.delete(4378423)
-
-    refute se.customer_repo.include?(customer)
+    cr = se.customers
+    customer = cr.find_by_id(1)
+    cr.delete(1)
+    refute se.customers.all.include?(customer)
   end
 end
