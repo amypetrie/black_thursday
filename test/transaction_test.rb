@@ -54,7 +54,8 @@ class TransactionTest < Minitest::Test
     :created_at => Time.now,
     :updated_at => Time.now
     })
-
-    assert_equal "2018-09-17", t.last_updated_date
+    time = t.updated_at.to_s.split(" ")[0]
+    time_2 = Time.parse(time)
+    assert_equal time_2, t.last_updated_date
   end
 end

@@ -25,6 +25,13 @@ class InvoiceItemRepositoryTest < MiniTest::Test
     assert_equal 21830, se.invoice_items.all.count
   end
 
+  def test_invoice_item_array_from_file_returns_items
+    se = SalesEngine.from_csv({
+      :invoice_items => "./data/invoice_items.csv"
+    })
+    assert_equal "", se.invoice_items.invoice_item_array_from_file
+  end
+
   def test_find_by_id_returns_matching_id
     se = SalesEngine.from_csv({
       :invoice_items => "./data/invoice_items.csv"
@@ -75,6 +82,14 @@ class InvoiceItemRepositoryTest < MiniTest::Test
     ii.update(id, attributes)
     assert_equal 700, obj.quantity
     assert_equal 400, obj.unit_price
+    assert_nil nil, se.invoice_items.do_nothing
+  end
+
+  def test_do_nothing_does_nothing
+    se = SalesEngine.from_csv({
+      :invoice_items => "./data/invoice_items.csv"
+    })
+    assert_nil nil, se.invoice_items.do_nothing
   end
 
   def test_delete_id_deletes_invoice_object_from_invoices_array
@@ -85,5 +100,12 @@ class InvoiceItemRepositoryTest < MiniTest::Test
     invoice_item = ir.find_by_id(9)
     ir.delete(9)
     refute ir.invoice_items.include?(invoice_item)
+  end
+
+  def test_inspect_checks_insepct_method
+    se = SalesEngine.from_csv({
+      :invoice_items => "./data/invoice_items.csv"
+    })
+    assert_equal 31, se.invoice_items.inspect.length
   end
 end

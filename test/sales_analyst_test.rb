@@ -475,4 +475,5 @@ class SalesAnalystTest < MiniTest::Test
 
     assert_equal 4, sales_analyst.paid_invoice_items_to_items(1233400).length
   end
+
 end
