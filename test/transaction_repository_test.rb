@@ -99,31 +99,31 @@ class TransactionRepoTest < MiniTest::Test
       :transactions => "./data/transactions.csv"
     })
 
-    attributes = {id: 500, created_at: "2018-09-08", updated_at: 5}
+    attributes = {id: 500, result: "success", created_at: "2018-09-08", updated_at: 5}
     expected_1 = 4986
-    expected_2 = Time.now
+    expected_2 = "success"
     assert_equal expected_1, se.transactions.create(attributes).id
-    assert_equal expected_2, se.transactions.create(attributes).updated_at
+    assert_equal expected_2, se.transactions.create(attributes).result
   end
 
   def test_update_will_update_cc_number_cc_expiration_date_result_and_updated_at
     se = SalesEngine.from_csv({
       :transactions => "./data/transactions.csv"
     })
-
-    id = 4378423
+    tr = se.transactions
+    id = 3957
+    obj = tr.find_by_id(id)
     attributes = {credit_card_number: 5005934823, credit_card_expiration_date: 0220, result: "success"}
-
-    assert_equal 5005934823, se.items.update(id, attributes).credit_card_number
-    assert_equal 0220, se.items.update(id, attributes).credit_card_expiration_date
-    assert_equal 10, se.items.update(id, attributes).result
+    tr.update(id,attributes)
+    assert_equal 5005934823, obj.credit_card_number
+    assert_equal 0220, obj.credit_card_expiration_date
+    assert_equal "success", obj.result
   end
 
   def test_delete_id_deletes_item_object_from_items_array
     se = SalesEngine.from_csv({
       :transactions => "./data/transactions.csv"
     })
-
     transaction = se.transactions.find_by_id(2)
     se.transactions.delete(2)
     refute se.transactions.all.include?(transaction)

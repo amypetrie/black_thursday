@@ -14,17 +14,17 @@ require_relative '../lib/item_repo'
 require_relative '../lib/sales_analyst'
 
 class SalesAnalystTest < MiniTest::Test
-  def test_it_exists
-    sales_engine = SalesEngine.from_csv({
-    :items     => "./data/items.csv",
-    :merchants => "./data/merchants.csv",
-    :invoices => "./data/invoices.csv",
-    :invoice_items => "./data/invoice_items.csv"
-    })
-
-    assert_instance_of SalesAnalyst, sales_engine.analyst
-  end
-
+  # def test_it_exists
+  #   sales_engine = SalesEngine.from_csv({
+  #   :items     => "./data/items.csv",
+  #   :merchants => "./data/merchants.csv",
+  #   :invoices => "./data/invoices.csv",
+  #   :invoice_items => "./data/invoice_items.csv"
+  #   })
+  #
+  #   assert_instance_of SalesAnalyst, sales_engine.analyst
+  # end
+  #
   # def test_average_items_per_merchant
   #   sales_engine = SalesEngine.from_csv({
   #   :items     => "./data/items.csv",
@@ -35,7 +35,19 @@ class SalesAnalystTest < MiniTest::Test
   #   sales_analyst = sales_engine.analyst
   #   assert_equal 2.88, sales_analyst.average_items_per_merchant
   # end
-  #
+
+  def test_invoice_object_per_merchant
+    sales_engine = SalesEngine.from_csv({
+    :items     => "./data/items.csv",
+    :merchants => "./data/merchants.csv",
+    :invoices => "./data/invoices.csv",
+    :invoice_items => "./data/invoice_items.csv"
+    })
+    sales_analyst = sales_engine.analyst
+    assert_equal 475, sales_analyst.invoice_object_per_merchant.count 
+
+  end
+
   # def test_find_number_item_objects_per_merchant
   #   sales_engine = SalesEngine.from_csv({
   #   :items     => "./data/sample_item_data.csv",
@@ -200,17 +212,17 @@ class SalesAnalystTest < MiniTest::Test
   #
   #   assert_instance_of BigDecimal, sales_analyst.total_revenue_by_date(date)
   # end
-
-  def test_merchants_paid_invoices
-    sales_engine = SalesEngine.from_csv({
-      :items     => "./data/sample_item_data.csv",
-      :merchants => "./data/sample_merchant_file.csv",
-      :invoices => "./data/sample_invoices_data.csv",
-      :invoice_items => "./data/sample_invoice_item_data.csv",
-      :transactions => "./data/sample_transactions_file.csv",
-      :customers => "./data/sample_customer_file.csv"
-      })
-    sales_analyst = sales_engine.analyst
-    assert_equal "", sales_analyst.merchant_paid_invoices(1233400)
-  end
+  #
+  # def test_merchants_paid_invoices
+  #   sales_engine = SalesEngine.from_csv({
+  #     :items     => "./data/sample_item_data.csv",
+  #     :merchants => "./data/sample_merchant_file.csv",
+  #     :invoices => "./data/sample_invoices_data.csv",
+  #     :invoice_items => "./data/sample_invoice_item_data.csv",
+  #     :transactions => "./data/sample_transactions_file.csv",
+  #     :customers => "./data/sample_customer_file.csv"
+  #     })
+  #   sales_analyst = sales_engine.analyst
+  #   assert_equal "", sales_analyst.merchant_paid_invoices(1233400)
+  # end
 end
