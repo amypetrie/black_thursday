@@ -410,37 +410,4 @@ class SalesAnalyst < SalesEngine
     end.compact
   end
 
-  #   pending_invoices = @sales_engine.invoices.all.find_all do |invoice|
-  #     invoice.status == :pending
-  #   end
-  #   merchants_with_pending_inv = pending_invoices.map do |pi|
-  #     pi.merchant_id
-  #   end
-  #   merchants_with_pending_inv = merchants_with_pending_inv.uniq
-  #   final = merchants_with_pending_inv.concat(merchants_with_pending_transactions).uniq
-  #   binding.pry
-  # end
-
-  # def merchants_with_pending_transactions
-  #   invoice_to_transactions = @sales_engine.transactions.all.group_by do |transaction|
-  #     transaction.invoice_id
-  #   end
-  #   invoice_results = invoice_to_transactions.each_pair do |invoice_id, transactions|
-  #       invoice_to_transactions[invoice_id] = transactions.map {|trans| trans.result}
-  #   end
-  #   success = []
-  #   pending = []
-  #   invoice_results.each_pair do |invoice_id, results|
-  #     if results.include? :success
-  #       success << invoice_id
-  #     else
-  #       pending << invoice_id
-  #     end
-  #   end
-  #   merchant_array = pending.map do |invoice_id|
-  #     @sales_engine.invoices.find_by_id(invoice_id).merchant_id
-  #   end
-  #   merchant_array.uniq
-  # end
-
 end
